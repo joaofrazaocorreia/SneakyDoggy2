@@ -10,10 +10,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float  rotationVelocityFactor;
 
     [SerializeField] private GameObject model;
+    [SerializeField] private Transform enemies;
 
     private CharacterController controller;
     private Vector3 velocity;
     private Vector3 motion;
+    private float height;
     private bool    moving;
     private bool hasObjective;
     private bool godmode;
@@ -31,18 +33,20 @@ public class PlayerMovement : MonoBehaviour
         gameStopped = false;
         playingDead = false;
         godmode = false;
-        moveSpeed /= 15f;
+        moveSpeed /= 18f;
+        height = transform.position.y;
     }
 
     private void Update()
     {
+        transform.position = new Vector3(transform.position.x, height, transform.position.z);
 
         if (Input.GetKeyDown(KeyCode.G) && !godmode)
         {
             godmode = true;
 
-            foreach (EnemyMovement e in transform.root.GetComponentsInChildren<EnemyMovement>())
-                e.GetComponent<Rigidbody>();
+            foreach (EnemyMovement e in enemies.GetComponentsInChildren<EnemyMovement>())
+                e.GetComponent<Rigidbody>().isKinematic = true;
 
             moveSpeed *= 2f;
             Debug.Log("Godmode");

@@ -29,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
         aggroTimer = 0f;
         idleTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
+        moveSpeed *= 3f;
     }
 
     // Update is called once per frame
@@ -46,7 +47,7 @@ public class EnemyMovement : MonoBehaviour
                 toTarget = currentTarget.position - transform.position;
             }
 
-            if (aggroTimer > 0 && toTarget.magnitude > 0.1f && (!player.playingDead || toTarget.magnitude > aggroDistance))
+            if (aggroTimer > 0 && toTarget.magnitude > 2f && (!player.playingDead || toTarget.magnitude > aggroDistance))
             {
                 movement = toTarget;
                 movement.Normalize();
@@ -74,7 +75,7 @@ public class EnemyMovement : MonoBehaviour
 
             }
 
-            else if (aggroTimer <= 0 && toTarget.magnitude > 0.2f && idleTimer <= 0)
+            else if (aggroTimer <= 0 && toTarget.magnitude > 2f && idleTimer <= 0)
             {
                 movement = toTarget;
                 movement.Normalize();
@@ -87,7 +88,7 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
 
-            else if (aggroTimer <= 0 && toTarget.magnitude <= 0.2f && idleTimer <= 0)
+            else if (aggroTimer <= 0 && toTarget.magnitude <= 2f && idleTimer <= 0)
             {
                 idleTimer = idleTime;
             }
