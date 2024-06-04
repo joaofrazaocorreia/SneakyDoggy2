@@ -96,14 +96,19 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(!settingsMenu.activeSelf);
     }
 
-    public void RestartLevel()
+    public void ReturnToMenu()
     {
         SceneManager.LoadScene(0);
     }
 
-    public void LoadHardmodeLevel()
+    public void RestartLevel()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void LoadHardmodeLevel()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public void ToggleDirectionalArrows()

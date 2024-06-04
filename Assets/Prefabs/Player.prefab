@@ -152,7 +152,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -389,9 +389,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
-  moveSpeed: 6
+  moveSpeed: 4
   rotationVelocityFactor: 2
   model: {fileID: 7059933824980147514}
+  enemies: {fileID: 0}
   gameStopped: 0
   playingDead: 0
 --- !u!143 &9052110233416933793
