@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         godmode = false;
         moveSpeed /= 18f;
         height = transform.position.y;
+
+        StartCoroutine(FixCollisions());
     }
 
     private void Update()
@@ -48,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
             foreach (EnemyMovement e in enemies.GetComponentsInChildren<EnemyMovement>())
                 e.GetComponent<Rigidbody>().isKinematic = true;
 
-            moveSpeed *= 2f;
+            moveSpeed *= 3f;
             Debug.Log("Godmode");
         }
     }
@@ -69,8 +71,11 @@ public class PlayerMovement : MonoBehaviour
             }
 
 
-            if (!playingDead)
+            if (!playingDead && controller.enabled)
             {
+                model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
+
+
                 velocity.x = Input.GetAxisRaw("Strafe");
                 velocity.z = Input.GetAxisRaw("Forward");
 
@@ -94,14 +99,22 @@ public class PlayerMovement : MonoBehaviour
             }
 
             else
+            {
                 motion = Vector3.zero;
+
+                if (playingDead)
+                    model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 90);
+                else
+                    model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
+            }
         }
 
         else velocity = Vector3.zero;
 
         motion = transform.TransformVector(motion);
 
-        controller.Move(motion);
+        if(controller.enabled)
+            controller.Move(motion);
 
         moving = motion.z != 0f || motion.x != 0f;
     }
@@ -135,6 +148,20 @@ public class PlayerMovement : MonoBehaviour
                 hasObjective = true;
                 uiManager.GetObjective(collision.gameObject);
             }
+        }
+    }
+
+    private IEnumerator FixCollisions()
+    {
+        while (true)
+        {
+            controller.enabled = false;
+
+            yield return new WaitForSeconds(0.01f);
+
+            controller.enabled = true;
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

@@ -35,7 +35,7 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.gameStopped && !UIManager.isPaused)
+        if (!player.gameStopped && !UIManager.isPaused && !rb.isKinematic)
         {
             Vector3 toTarget = currentTarget.position - transform.position;
 
@@ -108,7 +108,8 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        else rb.velocity = Vector3.zero;
+        else if(!rb.isKinematic)
+            rb.velocity = Vector3.zero;
     }
 
     public void ToggleSpectateCamera()
