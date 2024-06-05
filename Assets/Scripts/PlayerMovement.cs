@@ -11,12 +11,14 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private GameObject model;
     [SerializeField] private Transform enemies;
+    [SerializeField] private Transform directionalArrow;
+    [SerializeField] private Transform[] objectiveAndExit;
 
     private CharacterController controller;
     private Vector3 velocity;
     private Vector3 motion;
     private float height;
-    private bool    moving;
+    private bool moving;
     private bool hasObjective;
     private bool godmode;
 
@@ -69,6 +71,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 playingDead = false;
             }
+
+
+            Vector3 arrowTargetPos;
+
+            if (!hasObjective)
+                arrowTargetPos = objectiveAndExit[0].position - transform.position;
+            else
+                arrowTargetPos = objectiveAndExit[1].position - transform.position;
+
+            directionalArrow.rotation = Quaternion.LookRotation(arrowTargetPos);
+            directionalArrow.rotation = Quaternion.Euler(new Vector3(directionalArrow.rotation.eulerAngles.x, directionalArrow.rotation.eulerAngles.y - 90, directionalArrow.rotation.eulerAngles.z));
 
 
             if (!playingDead && controller.enabled)
