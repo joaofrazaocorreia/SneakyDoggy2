@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5213587094768395337}
   - component: {fileID: 7316843668436473252}
-  - component: {fileID: 3615267088313253007}
+  - component: {fileID: 2594334086008501133}
   m_Layer: 0
   m_Name: EnemyGlow
   m_TagString: Untagged
@@ -182,8 +182,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0.009601116, a: 1}
-  m_Intensity: 5
-  m_Range: 25
+  m_Intensity: 750
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -224,7 +224,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 10
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -232,7 +232,7 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &3615267088313253007
+--- !u!114 &2594334086008501133
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
