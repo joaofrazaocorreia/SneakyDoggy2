@@ -1122,6 +1122,7 @@ MonoBehaviour:
   - {fileID: 2067601435}
   - {fileID: 3623776677323798541}
   timerText: {fileID: 80763585}
+  timeLimit: 120
   isPaused: 0
   smoothTurnEnabled: 0
 --- !u!4 &159994896
