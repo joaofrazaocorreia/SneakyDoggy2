@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class MenuAudioManager : MonoBehaviour
 {
     public static bool active = false;
     private void Awake()

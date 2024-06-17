@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public LevelAudioManager levelAudioManager;
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject pauseMenu;
@@ -67,7 +68,7 @@ public class UIManager : MonoBehaviour
             TogglePause();
         }
 
-        if(!isPaused && !loseScreen.activeSelf)
+        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf)
         {
             timeLimit -= Time.deltaTime;
 
@@ -99,6 +100,7 @@ public class UIManager : MonoBehaviour
             {
                 Lose();
                 timerText.text = $"Time left: 00:00:00";
+                levelAudioManager.PlayTimesUp();
             }
         }
     }
@@ -106,17 +108,20 @@ public class UIManager : MonoBehaviour
     public void Win()
     {
         winScreen.SetActive(true);
+        levelAudioManager.PlayLevelWin();
     }
 
     public void Lose()
     {
         loseScreen.SetActive(true);
+        levelAudioManager.PlayLevelLose();
     }
 
     public void GetObjective(GameObject objective)
     {
         objectiveIndicator.GetComponent<Image>().sprite = objective.GetComponentInChildren<SpriteRenderer>().sprite;
         objectiveIndicator.SetActive(true);
+        levelAudioManager.PlayItemPickup();
         
         Destroy(objective);
     }
