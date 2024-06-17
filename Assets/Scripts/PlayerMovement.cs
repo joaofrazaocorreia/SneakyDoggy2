@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, height, transform.position.z);
 
-        if (Input.GetKeyDown(KeyCode.G) && !godmode)
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.G) && !godmode)
         {
             godmode = true;
 
