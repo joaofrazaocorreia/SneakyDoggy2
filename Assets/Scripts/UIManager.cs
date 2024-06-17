@@ -17,15 +17,20 @@ public class UIManager : MonoBehaviour
     public GameObject[] directionalArrows;
     public GameObject[] helpingGlows;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI winScoreText;
     [SerializeField] private float timeLimit = 90f;
 
     [HideInInspector] public bool isPaused;
     [HideInInspector] public bool smoothTurnEnabled;
     private bool arrowsEnabled;
     private bool glowEnabled;
+    private int score;
 
     private void Start()
     {
+        score = 0;
+
         isPaused = pauseMenu.activeSelf;
         CheckTimeScale();
 
@@ -109,12 +114,14 @@ public class UIManager : MonoBehaviour
     {
         winScreen.SetActive(true);
         levelAudioManager.PlayLevelWin();
+        AddScore(1000 + (int)Mathf.Floor(timeLimit/60 * 100));
     }
 
     public void Lose()
     {
         loseScreen.SetActive(true);
         levelAudioManager.PlayLevelLose();
+        AddScore(-250);
     }
 
     public void GetObjective(GameObject objective)
@@ -122,6 +129,7 @@ public class UIManager : MonoBehaviour
         objectiveIndicator.GetComponent<Image>().sprite = objective.GetComponentInChildren<SpriteRenderer>().sprite;
         objectiveIndicator.SetActive(true);
         levelAudioManager.PlayItemPickup();
+        AddScore(500 + (int)Mathf.Floor(timeLimit/60 * 25));
         
         Destroy(objective);
     }
@@ -211,6 +219,25 @@ public class UIManager : MonoBehaviour
         {
             go.SetActive(glowEnabled);
         }
+    }
+
+    public void AddScore(int amount)
+    {
+        string scoreString = "Score: ";
+        score += amount;
+
+
+        for(int i = 10000; i >= 10; i /= 10)
+        {
+            if (score < i)
+                scoreString += "0";
+            else break;
+        }
+
+        scoreString += score;
+
+        scoreText.text = scoreString;
+        winScoreText.text = scoreString;
     }
 
     public void QuitGame()
