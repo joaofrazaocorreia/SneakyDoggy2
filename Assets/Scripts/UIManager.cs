@@ -128,6 +128,7 @@ public class UIManager : MonoBehaviour
     public void GetObjective(GameObject objective)
     {
         objectiveIndicator.GetComponent<Image>().sprite = objective.GetComponentInChildren<SpriteRenderer>().sprite;
+        objectiveIndicator.GetComponent<Image>().color = Color.white;
         objectiveIndicator.SetActive(true);
         levelAudioManager.PlayItemPickup();
         AddScore(500 + (int)Mathf.Floor(timeLimit/60 * 25));
