@@ -12,9 +12,12 @@ public class EnemyMovement : MonoBehaviour
     public Transform[] movementTargets;
     public PlayerMovement player;
     public GameObject cameraRig;
+    [SerializeField] private AudioClip detectAudio;
+    [SerializeField] private AudioClip moveAudio;
 
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
+    private AudioSource audioSource;
     private UIManager UIManager;
     private float aggroTimer;
     private float idleTimer;
@@ -26,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         UIManager = player.uiManager;
         aggroTimer = 0f;
         idleTimer = 0f;
@@ -44,6 +48,9 @@ public class EnemyMovement : MonoBehaviour
 
             if ((player.transform.position - transform.position).magnitude <= aggroDistance && !player.playingDead)
             {
+                if(currentTarget != player.transform)
+                    audioSource.PlayOneShot(detectAudio);
+                    
                 aggroTimer = aggroTime;
                 idleTimer = 0f;
                 currentTarget = player.transform;
@@ -78,6 +85,7 @@ public class EnemyMovement : MonoBehaviour
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
 
                     navMeshAgent.SetDestination(currentTarget.position);
+                    audioSource.PlayOneShot(moveAudio);
                 }
 
             }
@@ -113,6 +121,7 @@ public class EnemyMovement : MonoBehaviour
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
 
                     navMeshAgent.SetDestination(currentTarget.position);
+                    audioSource.PlayOneShot(moveAudio);
                 }
             }
         }

@@ -14265,6 +14265,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1530700459}
     - target: {fileID: 7085142902478068876, guid: 0dacdbc9dd7c6b345a14fa2b66abf371, type: 3}
+      propertyPath: movementTargets.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085142902478068876, guid: 0dacdbc9dd7c6b345a14fa2b66abf371, type: 3}
       propertyPath: movementTargets.Array.data[0]
       value: 
       objectReference: {fileID: 31468994}
