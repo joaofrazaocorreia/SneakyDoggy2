@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 motion;
     private float height;
     private bool moving;
+    private bool colliding;
     private bool hasObjective;
     private bool godmode;
 
@@ -31,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         velocity       = Vector3.zero;
         motion         = Vector3.zero;
         moving         = false;
+        colliding = false;
         hasObjective = false;
         gameStopped = false;
         playingDead = false;
@@ -134,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        colliding = true;
         if (!gameStopped && !uiManager.isPaused)
         {
             if (collision.transform.tag == "Entrance" && hasObjective)
@@ -146,6 +149,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerStay(Collider collision)
     {
+        colliding = true;
         if (!gameStopped && !uiManager.isPaused)
         {
             if (collision.transform.tag == "Enemy" && !playingDead && !godmode)
@@ -164,9 +168,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider collision)
+    {
+        colliding = false;
+    }
+
     private IEnumerator FixCollisions()
     {
-        while (true)
+        while (colliding)
         {
             controller.enabled = false;
 
@@ -174,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
 
             controller.enabled = true;
 
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }
