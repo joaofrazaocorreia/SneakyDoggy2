@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class EnemyMovement : MonoBehaviour
     public GameObject cameraRig;
 
     private Rigidbody rb;
+    private NavMeshAgent navMeshAgent;
     private UIManager UIManager;
-    private Vector3 movement;
     private float aggroTimer;
     private float idleTimer;
     private Transform currentTarget;
@@ -24,12 +25,14 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         UIManager = player.uiManager;
-        movement = new Vector3();
         aggroTimer = 0f;
         idleTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
         moveSpeed *= 3f;
+
+        navMeshAgent.SetDestination(currentTarget.position);
     }
 
     // Update is called once per frame
@@ -45,24 +48,26 @@ public class EnemyMovement : MonoBehaviour
                 idleTimer = 0f;
                 currentTarget = player.transform;
                 toTarget = currentTarget.position - transform.position;
+
+                navMeshAgent.SetDestination(currentTarget.position);
             }
 
             if (aggroTimer > 0 && toTarget.magnitude > 2f && (!player.playingDead || toTarget.magnitude > aggroDistance))
             {
-                movement = toTarget;
-                movement.Normalize();
-                rb.velocity = movement * moveSpeed;
+                Vector3 motion = toTarget;
+                motion.Normalize();
+                navMeshAgent.speed = moveSpeed;
 
-                if (movement != Vector3.zero)
+                if (motion != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(movement);
+                    Quaternion rotation = Quaternion.LookRotation(motion);
                     transform.GetChild(0).rotation = rotation;
                 }
             }
 
             else if (aggroTimer > 0 && player.playingDead && toTarget.magnitude <= aggroDistance)
             {
-                rb.velocity = Vector3.zero;
+                navMeshAgent.speed = 0f;
                 aggroTimer -= Time.deltaTime;
 
                 if (aggroTimer <= 0)
@@ -71,19 +76,21 @@ public class EnemyMovement : MonoBehaviour
 
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
+
+                    navMeshAgent.SetDestination(currentTarget.position);
                 }
 
             }
 
             else if (aggroTimer <= 0 && toTarget.magnitude > 2f && idleTimer <= 0)
             {
-                movement = toTarget;
-                movement.Normalize();
-                rb.velocity = movement * moveSpeed;
+                Vector3 motion = toTarget;
+                motion.Normalize();
+                navMeshAgent.speed = moveSpeed;
 
-                if (movement != Vector3.zero)
+                if (motion != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(movement);
+                    Quaternion rotation = Quaternion.LookRotation(motion);
                     transform.GetChild(0).rotation = rotation;
                 }
             }
@@ -95,7 +102,7 @@ public class EnemyMovement : MonoBehaviour
 
             else
             {
-                rb.velocity = Vector3.zero;
+                navMeshAgent.speed = 0f;
                 idleTimer -= Time.deltaTime;
 
                 if (idleTimer <= 0)
@@ -104,12 +111,14 @@ public class EnemyMovement : MonoBehaviour
 
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
+
+                    navMeshAgent.SetDestination(currentTarget.position);
                 }
             }
         }
 
         else if(!rb.isKinematic)
-            rb.velocity = Vector3.zero;
+            navMeshAgent.speed = 0f;
     }
 
     public void ToggleSpectateCamera()

@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2594777502415086363}
   - component: {fileID: 3141345665873405723}
   - component: {fileID: 7464179823777818316}
+  - component: {fileID: 2196238769982111256}
   m_Layer: 0
   m_Name: Hard Enemy
   m_TagString: Enemy
@@ -168,6 +169,28 @@ CapsuleCollider:
   m_Height: 2.1494617
   m_Direction: 1
   m_Center: {x: -0.16681132, y: -0.06501468, z: 0.062005363}
+--- !u!195 &2196238769982111256
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292685703627163111}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.5
+  m_Speed: 3.5
+  m_Acceleration: 10000
+  avoidancePriority: 50
+  m_AngularSpeed: 10000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &5388468906758010855
 GameObject:
   m_ObjectHideFlags: 0
