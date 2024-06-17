@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ public class UIManager : MonoBehaviour
     public GameObject smoothTurnCheckmark;
     public GameObject[] directionalArrows;
     public GameObject[] helpingGlows;
+    public TextMeshProUGUI timerText;
+    [SerializeField] private float timeLimit = 90f;
 
     [HideInInspector] public bool isPaused;
     [HideInInspector] public bool smoothTurnEnabled;
@@ -23,6 +26,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         isPaused = pauseMenu.activeSelf;
+        CheckTimeScale();
 
         arrowsEnabled = false;
         arrowsCheckmark.SetActive(false);
@@ -62,6 +66,41 @@ public class UIManager : MonoBehaviour
         {
             TogglePause();
         }
+
+        if(!isPaused && !loseScreen.activeSelf)
+        {
+            timeLimit -= Time.deltaTime;
+
+            float minutes = Mathf.Floor(timeLimit / 60);
+            float seconds = Mathf.Floor(timeLimit % 60);
+            float milliseconds = Mathf.Floor((timeLimit % 60 - Mathf.Floor(timeLimit % 60)) * 100);
+
+            timerText.text = "Time left: ";
+            
+            if (minutes < 10)
+                timerText.text += "0";
+            timerText.text += $"{minutes}:";
+
+            if (seconds < 10)
+                timerText.text += "0";
+            timerText.text += $"{seconds}:";
+
+            if (milliseconds < 10)
+                timerText.text += "0";
+            timerText.text += $"{milliseconds}";
+
+
+            if (timeLimit >= 11)
+                timerText.color = Color.white;
+            else
+                timerText.color = Color.red;
+
+            if (timeLimit <= 0f)
+            {
+                Lose();
+                timerText.text = $"Time left: 00:00:00";
+            }
+        }
     }
 
     public void Win()
@@ -88,6 +127,16 @@ public class UIManager : MonoBehaviour
 
         pauseMenu.SetActive(!pauseMenu.activeSelf);
         isPaused = pauseMenu.activeSelf;
+
+        CheckTimeScale();
+    }
+
+    private void CheckTimeScale()
+    {
+        if (isPaused)
+            Time.timeScale = 0f;
+        else
+            Time.timeScale = 1f;
     }
 
     public void ToggleSettingsMenu()
