@@ -136,14 +136,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!gameStopped && !uiManager.isPaused)
         {
-            if (collision.transform.tag == "Enemy" && !playingDead && !godmode)
-            {
-                gameStopped = true;
-                collision.transform.GetComponent<EnemyMovement>().ToggleSpectateCamera();
-                gameObject.SetActive(false);
-                uiManager.Lose();
-            }
-
             if (collision.transform.tag == "Entrance" && hasObjective)
             {
                 gameStopped = true;
@@ -156,6 +148,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!gameStopped && !uiManager.isPaused)
         {
+            if (collision.transform.tag == "Enemy" && !playingDead && !godmode)
+            {
+                gameStopped = true;
+                collision.transform.GetComponent<EnemyMovement>().ToggleSpectateCamera();
+                gameObject.SetActive(false);
+                uiManager.Lose();
+            }
+
             if (collision.transform.tag == "Objective") 
             {
                 hasObjective = true;

@@ -35,22 +35,22 @@ public class UIManager : MonoBehaviour
 
 
 
-        if (PlayerPrefs.GetInt("Arrows", 0) == 0)
+        if (PlayerPrefs.GetInt("Arrows", 0) == 1)
         {
-            arrowsEnabled = false;
-            arrowsCheckmark.SetActive(false);
+            arrowsEnabled = true;
+            arrowsCheckmark.SetActive(true);
         }
 
-        if (PlayerPrefs.GetInt("Glow", 0) == 0)
+        if (PlayerPrefs.GetInt("Glow", 0) == 1)
         {
-            glowEnabled = false;
-            glowCheckmark.SetActive(false);
+            glowEnabled = true;
+            glowCheckmark.SetActive(true);
         }
 
-        if (PlayerPrefs.GetInt("SmoothTurn", 1) == 0)
+        if (PlayerPrefs.GetInt("SmoothTurn", 1) == 1)
         {
-            smoothTurnEnabled = false;
-            smoothTurnCheckmark.SetActive(false);
+            smoothTurnEnabled = true;
+            smoothTurnCheckmark.SetActive(true);
         }
         
         UpdateSettings();
