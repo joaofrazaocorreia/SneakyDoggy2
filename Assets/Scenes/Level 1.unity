@@ -4910,7 +4910,7 @@ GameObject:
   - component: {fileID: 1304903175}
   - component: {fileID: 1304903174}
   m_Layer: 0
-  m_Name: Audio Source (1)
+  m_Name: BirdsBackgroundNoise
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4925,10 +4925,10 @@ AudioSource:
   m_GameObject: {fileID: 1304903173}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 5882770f6d1aba049b763d41036bdad2, type: 2}
+  OutputAudioMixerGroup: {fileID: -7408059528531238444, guid: 5882770f6d1aba049b763d41036bdad2, type: 2}
   m_audioClip: {fileID: 8300000, guid: fbc2eaa4ee094b146ad7ece1d0f9f6c2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.551
+  m_Volume: 0.4
   m_Pitch: 0.68
   Loop: 1
   Mute: 0
@@ -4936,10 +4936,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 30
+  MinDistance: 0
+  MaxDistance: 150
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -4972,7 +4972,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
