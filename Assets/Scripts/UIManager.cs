@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -121,7 +122,7 @@ public class UIManager : MonoBehaviour
     {
         loseScreen.SetActive(true);
         levelAudioManager.PlayLevelLose();
-        AddScore(-250);
+        scoreText.text = "Score: 00000";
     }
 
     public void GetObjective(GameObject objective)
