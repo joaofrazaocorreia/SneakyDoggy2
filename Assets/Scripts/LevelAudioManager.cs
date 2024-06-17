@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelAudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource feedbackAudioSource;
+    [SerializeField] private AudioClip UIbutton;
     [SerializeField] private AudioClip itemPickup;
     [SerializeField] private AudioClip levelWin;
     [SerializeField] private AudioClip levelLose;
@@ -14,6 +15,12 @@ public class LevelAudioManager : MonoBehaviour
     public void PlayFeedbackSound(AudioClip clip)
     {
         feedbackAudioSource.PlayOneShot(clip);
+    }
+
+    public void PlayUIButton()
+    {
+        feedbackAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        PlayFeedbackSound(UIbutton);
     }
 
     public void PlayItemPickup()
