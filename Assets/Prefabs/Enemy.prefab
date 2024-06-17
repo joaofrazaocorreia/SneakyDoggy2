@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 662169890036621210}
   - component: {fileID: 5612064499929467489}
   - component: {fileID: 5422860467252541916}
+  - component: {fileID: 3622029077044883425}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -423,6 +424,28 @@ CapsuleCollider:
   m_Height: 1.6269171
   m_Direction: 1
   m_Center: {x: 0.13782048, y: 0.080937944, z: -0.008950631}
+--- !u!195 &3622029077044883425
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7475063586980496122}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.5
+  m_Speed: 3.5
+  m_Acceleration: 10000
+  avoidancePriority: 50
+  m_AngularSpeed: 10000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &8142056306370145135
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +458,7 @@ GameObject:
   - component: {fileID: 5698189781180195700}
   - component: {fileID: 7039091576635843900}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: DetectionRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -483,7 +506,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 13
+  m_Radius: 15
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2100455220117460075
 PrefabInstance:
