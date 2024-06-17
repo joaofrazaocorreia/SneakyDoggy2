@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.78113204, g: 0.78113204, b: 0.78113204, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.23448119, g: 0.18168023, b: 0.2981131, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: ae000ab37f977ef47a33c0020cd84759, type: 2}
   m_HaloStrength: 0.5
@@ -7703,22 +7703,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5368507990371900025, guid: adb8f016a09f33246851ae4f11c90d20, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 13.56
-      objectReference: {fileID: 0}
-    - target: {fileID: 5368507990371900025, guid: adb8f016a09f33246851ae4f11c90d20, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5368507990371900025, guid: adb8f016a09f33246851ae4f11c90d20, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9733132
-      objectReference: {fileID: 0}
-    - target: {fileID: 5368507990371900025, guid: adb8f016a09f33246851ae4f11c90d20, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.22948071
-      objectReference: {fileID: 0}
     - target: {fileID: 5368507990371900025, guid: adb8f016a09f33246851ae4f11c90d20, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 26.533
