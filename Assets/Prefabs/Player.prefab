@@ -1175,6 +1175,7 @@ MonoBehaviour:
   objectiveAndExit:
   - {fileID: 0}
   - {fileID: 0}
+  anim: {fileID: 612217407939399595}
   gameStopped: 0
   playingDead: 0
 --- !u!143 &9052110233416933793
@@ -1704,6 +1705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 524792138941352104}
+  - component: {fileID: 612217407939399595}
   m_Layer: 0
   m_Name: Skeleton_FluffyDog
   m_TagString: Untagged
@@ -1727,3 +1729,24 @@ Transform:
   - {fileID: 312478414795356007}
   m_Father: {fileID: 186360436309910854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &612217407939399595
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9035373663505553361}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 5a016b5aca9bed2419c9f63b90a8143b, type: 3}
+  m_Controller: {fileID: 9100000, guid: 039c42e38afe00e43b13dd1561619f1d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

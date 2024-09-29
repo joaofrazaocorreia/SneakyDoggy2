@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform enemies;
     [SerializeField] private Transform directionalArrow;
     [SerializeField] private Transform[] objectiveAndExit;
+    [SerializeField] private Animator anim;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -65,18 +67,23 @@ public class PlayerMovement : MonoBehaviour
             {
                 playingDead = true;
                 velocity = Vector3.zero;
+                anim.SetBool("PlayDead",true);
             }
 
-            else if (playingDead)
+            else if (Input.GetKey(KeyCode.Q)==false)
             {
                 playingDead = false;
+                anim.SetBool("PlayDead",false);
+
             }
+            
 
 
             Vector3 arrowTargetPos;
 
             if (!hasObjective)
                 arrowTargetPos = objectiveAndExit[0].position - transform.position;
+
             else
                 arrowTargetPos = objectiveAndExit[1].position - transform.position;
 
@@ -87,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
             if (!playingDead && controller.enabled)
             {
                 model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
-
+                
 
                 velocity.x = Input.GetAxisRaw("Strafe");
                 velocity.z = Input.GetAxisRaw("Forward");
@@ -100,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
                     float rotX = (velocity.x > 0.5 && velocity.x < 1) || (velocity.x < -0.5 && velocity.x > -1) ? velocity.x / Mathf.Sqrt(Mathf.Pow(velocity.x, 2)) * 0.5f : velocity.x;
                     float rotZ = (velocity.z > 0.5 && velocity.z < 1) || (velocity.z < -0.5 && velocity.z > -1) ? velocity.z / Mathf.Sqrt(Mathf.Pow(velocity.z, 2)) * 0.5f : velocity.z;
                     Quaternion rotation;
-
+                    
                     if (rotX == 0.5 && rotZ == -0.5)
                         rotation = Quaternion.Euler(0, 135, 0);
 
@@ -114,22 +121,41 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 motion = Vector3.zero;
-
+                
                 if (playingDead)
-                    model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 90);
-                else
+                {
                     model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
+                    
+                }
+                else
+                {
+                    model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
+                   
+
+                }
             }
         }
 
         else velocity = Vector3.zero;
 
         motion = transform.TransformVector(motion);
-
-        if(controller.enabled)
+        
+        if (controller.enabled)
+        {
             controller.Move(motion);
+            
+        }
+
 
         moving = motion.z != 0f || motion.x != 0f;
+        if (velocity != Vector3.zero)
+        {
+            anim.SetTrigger("Walk");
+        }
+        else if (playingDead == false && moving == false)
+        {
+            anim.SetTrigger("Idle");
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
