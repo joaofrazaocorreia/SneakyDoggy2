@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 81556819}
   - component: {fileID: 81556818}
   m_Layer: 5
-  m_Name: Settings Menu
+  m_Name: Settings Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1170,6 +1170,12 @@ MonoBehaviour:
   loseScreen: {fileID: 2139525056}
   pauseMenu: {fileID: 407232035}
   settingsMenu: {fileID: 212447900}
+  creditsMenu: {fileID: 212447900}
+  winScreenFirstButton: {fileID: 241865858}
+  loseScreenFirstButton: {fileID: 236783017}
+  pauseMenuFirstButton: {fileID: 1368765709}
+  settingsMenuFirstButton: {fileID: 1811465608}
+  creditsMenuFirstButton: {fileID: 1811465608}
   objectiveIndicator: {fileID: 1691282513}
   arrowsCheckmark: {fileID: 360329395}
   glowCheckmark: {fileID: 1733299853}
