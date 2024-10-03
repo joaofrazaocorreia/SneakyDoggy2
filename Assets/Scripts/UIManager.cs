@@ -1,16 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    private EventSystem eventSystem;
     public LevelAudioManager levelAudioManager;
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject pauseMenu;
     public GameObject settingsMenu;
+    public GameObject creditsMenu;
+    public GameObject winScreenFirstButton;
+    public GameObject loseScreenFirstButton;
+    public GameObject pauseMenuFirstButton;
+    public GameObject settingsMenuFirstButton;
+    public GameObject creditsMenuFirstButton;
     public GameObject objectiveIndicator;
     public GameObject arrowsCheckmark;
     public GameObject glowCheckmark;
@@ -30,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        eventSystem = FindObjectOfType<EventSystem>();
         score = 0;
 
         isPaused = pauseMenu.activeSelf;
@@ -114,6 +122,7 @@ public class UIManager : MonoBehaviour
     public void Win()
     {
         winScreen.SetActive(true);
+        eventSystem.SetSelectedGameObject(winScreenFirstButton);
         levelAudioManager.PlayLevelWin();
         AddScore(1000 + (int)Mathf.Floor(timeLimit/60 * 100));
     }
@@ -121,6 +130,7 @@ public class UIManager : MonoBehaviour
     public void Lose()
     {
         loseScreen.SetActive(true);
+        eventSystem.SetSelectedGameObject(loseScreenFirstButton);
         levelAudioManager.PlayLevelLose();
         scoreText.text = "Score: 00000";
     }
@@ -141,6 +151,10 @@ public class UIManager : MonoBehaviour
         settingsMenu.SetActive(false);
 
         pauseMenu.SetActive(!pauseMenu.activeSelf);
+        
+        if(pauseMenu.activeSelf)
+            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
+
         isPaused = pauseMenu.activeSelf;
 
         CheckTimeScale();
@@ -158,6 +172,22 @@ public class UIManager : MonoBehaviour
     {
         settingsMenu.SetActive(!settingsMenu.activeSelf);
         pauseMenu.SetActive(!settingsMenu.activeSelf);
+
+        if(settingsMenu.activeSelf)
+            eventSystem.SetSelectedGameObject(settingsMenuFirstButton);
+        else
+            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
+    }
+
+    public void ToggleCreditsMenu()
+    {
+        creditsMenu.SetActive(!creditsMenu.activeSelf);
+        pauseMenu.SetActive(!creditsMenu.activeSelf);
+        
+        if(creditsMenu.activeSelf)
+            eventSystem.SetSelectedGameObject(creditsMenuFirstButton);
+        else
+            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
     }
 
     public void LoadScene(int n)
