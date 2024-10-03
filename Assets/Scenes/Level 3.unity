@@ -1365,6 +1365,12 @@ MonoBehaviour:
   loseScreen: {fileID: 1203018861}
   pauseMenu: {fileID: 1197082140}
   settingsMenu: {fileID: 46828654}
+  creditsMenu: {fileID: 46828654}
+  winScreenFirstButton: {fileID: 1159379853}
+  loseScreenFirstButton: {fileID: 1316665062}
+  pauseMenuFirstButton: {fileID: 628073101}
+  settingsMenuFirstButton: {fileID: 1959620604}
+  creditsMenuFirstButton: {fileID: 1959620604}
   objectiveIndicator: {fileID: 1691282513}
   arrowsCheckmark: {fileID: 600205743}
   glowCheckmark: {fileID: 1250512102}
