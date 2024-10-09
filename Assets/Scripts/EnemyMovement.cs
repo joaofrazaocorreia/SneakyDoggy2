@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform[] movementTargets;
     public PlayerMovement player;
     public GameObject cameraRig;
+    [SerializeField] private Slider moveSpeedSlider;
     [SerializeField] private AudioClip detectAudio;
     [SerializeField] private AudioClip moveAudio;
 
@@ -63,7 +63,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 Vector3 motion = toTarget;
                 motion.Normalize();
-                navMeshAgent.speed = moveSpeed;
+                navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
 
                 if (motion != Vector3.zero)
                 {
@@ -94,7 +94,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 Vector3 motion = toTarget;
                 motion.Normalize();
-                navMeshAgent.speed = moveSpeed;
+                navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
 
                 if (motion != Vector3.zero)
                 {

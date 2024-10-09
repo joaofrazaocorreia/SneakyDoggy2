@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     public GameObject arrowsCheckmark;
     public GameObject glowCheckmark;
     public GameObject smoothTurnCheckmark;
+    public GameObject enemySpeedSlider;
+    public GameObject enemiesCheckmark;
     public GameObject[] directionalArrows;
     public GameObject[] helpingGlows;
     public TextMeshProUGUI timerText;
@@ -33,6 +35,9 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public bool smoothTurnEnabled;
     private bool arrowsEnabled;
     private bool glowEnabled;
+    private int enemySpeedSliderValue;
+    private bool enemiesEnabled;
+    private EnemyMovement[] enemies;
     private int score;
 
     private void Start()
@@ -52,6 +57,13 @@ public class UIManager : MonoBehaviour
         smoothTurnEnabled = true;
         smoothTurnCheckmark.SetActive(true);
 
+        enemySpeedSliderValue = 100;
+
+        enemiesEnabled = true;
+        enemiesCheckmark.SetActive(true);
+
+        enemies = FindObjectsOfType<EnemyMovement>();
+
 
 
         if (PlayerPrefs.GetInt("Arrows", 0) == 1)
@@ -70,6 +82,18 @@ public class UIManager : MonoBehaviour
         {
             smoothTurnEnabled = true;
             smoothTurnCheckmark.SetActive(true);
+        }
+
+        if (PlayerPrefs.GetInt("EnemySpeed", 100) != 100)
+        {
+            enemySpeedSliderValue = PlayerPrefs.GetInt("EnemySpeed");
+            enemySpeedSlider.GetComponent<Slider>().value = enemySpeedSliderValue;
+        }
+
+        if (PlayerPrefs.GetInt("EnemyToggle", 1) == 0)
+        {
+            enemiesEnabled = false;
+            enemiesCheckmark.SetActive(false);
         }
         
         UpdateSettings();
@@ -240,16 +264,48 @@ public class UIManager : MonoBehaviour
         UpdateSettings();
     }
 
+    public void ChangeEnemySpeed()
+    {
+        enemySpeedSliderValue = (int) enemySpeedSlider.GetComponent<Slider>().value;
+        PlayerPrefs.SetInt("EnemySpeed", enemySpeedSliderValue);
+
+
+        PlayerPrefs.Save();
+        UpdateSettings();
+    }
+
+    public void ToggleEnemies()
+    {
+        enemiesEnabled = !enemiesEnabled;
+        enemiesCheckmark.SetActive(enemiesEnabled);
+
+        if(enemiesEnabled)
+            PlayerPrefs.SetInt("EnemyToggle", 1);
+        else
+            PlayerPrefs.SetInt("EnemyToggle", 0);
+
+        PlayerPrefs.Save();
+        UpdateSettings();
+    }
+
     private void UpdateSettings()
     {
         foreach(GameObject go in directionalArrows)
         {
-            go.SetActive(arrowsEnabled);
+            if(go)
+                go.SetActive(arrowsEnabled);
         }
 
         foreach(GameObject go in helpingGlows)
         {
-            go.SetActive(glowEnabled);
+            if(go)
+                go.SetActive(glowEnabled);
+        }
+
+        foreach(EnemyMovement e in enemies)
+        {
+            if(e)
+                e.gameObject.SetActive(enemiesEnabled);
         }
     }
 
