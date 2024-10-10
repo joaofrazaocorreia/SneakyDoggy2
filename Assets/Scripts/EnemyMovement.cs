@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Slider moveSpeedSlider;
     [SerializeField] private AudioClip detectAudio;
     [SerializeField] private AudioClip moveAudio;
+    [SerializeField] private Animator anim;
 
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
@@ -44,13 +45,24 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!player.gameStopped && !UIManager.isPaused && !rb.isKinematic)
         {
+            if (idleTimer > 0f)
+                anim.SetTrigger("Idle");
+            else
+                anim.SetTrigger("Walk");
             Vector3 toTarget = currentTarget.position - transform.position;
 
             if ((player.transform.position - transform.position).magnitude <= aggroDistance && !player.playingDead)
             {
-                if(currentTarget != player.transform)
+                anim.SetBool("Spot", false);
+                if (currentTarget != player.transform)
+                {
                     audioSource.PlayOneShot(detectAudio);
+                    anim.SetBool("Spot", true);
+                }
+               
                     
+
+                
                 aggroTimer = aggroTime;
                 idleTimer = 0f;
                 currentTarget = player.transform;
@@ -67,8 +79,10 @@ public class EnemyMovement : MonoBehaviour
 
                 if (motion != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(motion);
-                    transform.GetChild(0).rotation = rotation;
+                    Vector3 rotation = Quaternion.LookRotation(motion).eulerAngles;
+                    rotation.x = 0f;
+                    transform.GetChild(0).rotation = Quaternion.Euler(rotation);
+                    
                 }
             }
 
@@ -83,7 +97,7 @@ public class EnemyMovement : MonoBehaviour
 
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
-
+                    
                     navMeshAgent.SetDestination(currentTarget.position);
                     audioSource.PlayOneShot(moveAudio);
                 }
@@ -92,19 +106,22 @@ public class EnemyMovement : MonoBehaviour
 
             else if (aggroTimer <= 0 && toTarget.magnitude > 2f && idleTimer <= 0)
             {
+                
                 Vector3 motion = toTarget;
                 motion.Normalize();
                 navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
 
                 if (motion != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(motion);
-                    transform.GetChild(0).rotation = rotation;
+                    Vector3 rotation = Quaternion.LookRotation(motion).eulerAngles;
+                    rotation.x = 0f;
+                    transform.GetChild(0).rotation = Quaternion.Euler(rotation);
                 }
             }
 
             else if (aggroTimer <= 0 && toTarget.magnitude <= 2f && idleTimer <= 0)
             {
+                
                 idleTimer = idleTime;
             }
 
@@ -120,6 +137,7 @@ public class EnemyMovement : MonoBehaviour
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
 
+                    
                     navMeshAgent.SetDestination(currentTarget.position);
                     audioSource.PlayOneShot(moveAudio);
                 }
