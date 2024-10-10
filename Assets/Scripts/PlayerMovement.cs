@@ -67,12 +67,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 playingDead = true;
                 velocity = Vector3.zero;
+                controller.enabled = false;
                 anim.SetBool("PlayDead",true);
             }
 
             else if (Input.GetKey(KeyCode.Q)==false)
             {
                 playingDead = false;
+                controller.enabled = true;
                 anim.SetBool("PlayDead",false);
 
             }
@@ -176,10 +178,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (collision.transform.tag == "Enemy" && !playingDead && !godmode)
             {
-                gameStopped = true;
-                collision.transform.GetComponent<EnemyMovement>().ToggleSpectateCamera();
-                gameObject.SetActive(false);
-                uiManager.Lose();
+                EnemyMovement collidedEnemy = collision.transform.GetComponent<EnemyMovement>();
+                if(!collidedEnemy.sleeping)
+                {
+                    gameStopped = true;
+                    collidedEnemy.ToggleSpectateCamera();
+                    gameObject.SetActive(false);
+                    uiManager.Lose();
+                }
             }
 
             if (collision.transform.tag == "Objective") 

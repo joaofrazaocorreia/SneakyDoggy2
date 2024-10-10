@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public bool sleeping = false;
     public float moveSpeed = 4f;
     public float idleTime = 5f;
     public float aggroTime = 2f;
@@ -11,6 +12,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform[] movementTargets;
     public PlayerMovement player;
     public GameObject cameraRig;
+    [SerializeField] private ParticleSystem sleepParticles;
     [SerializeField] private Slider moveSpeedSlider;
     [SerializeField] private AudioClip detectAudio;
     [SerializeField] private AudioClip moveAudio;
@@ -23,6 +25,8 @@ public class EnemyMovement : MonoBehaviour
     private float aggroTimer;
     private float idleTimer;
     private Transform currentTarget;
+    private bool originallySleeping;
+    public bool OriginallySleeping {get => originallySleeping;}
     
 
     // Start is called before the first frame update
@@ -36,6 +40,7 @@ public class EnemyMovement : MonoBehaviour
         idleTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
         moveSpeed *= 3f;
+        originallySleeping = sleeping;
 
         navMeshAgent.SetDestination(currentTarget.position);
     }
@@ -43,25 +48,34 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.gameStopped && !UIManager.isPaused && !rb.isKinematic)
+        if (!player.gameStopped && !UIManager.isPaused && !rb.isKinematic && !sleeping)
         {
+            anim.SetBool("Sleep", false);
+
+            if(sleepParticles.isPlaying)
+                sleepParticles.Stop();
+
+
             if (idleTimer > 0f)
-                anim.SetTrigger("Idle");
+            {
+                anim.SetBool("Idle", true);
+                anim.SetBool("Walk", false);
+            }
+
             else
-                anim.SetTrigger("Walk");
+            {
+                anim.SetBool("Walk", true);
+                anim.SetBool("Idle", false);
+            }
             Vector3 toTarget = currentTarget.position - transform.position;
 
             if ((player.transform.position - transform.position).magnitude <= aggroDistance && !player.playingDead)
             {
-                anim.SetBool("Spot", false);
                 if (currentTarget != player.transform)
                 {
                     audioSource.PlayOneShot(detectAudio);
-                    anim.SetBool("Spot", true);
+                    anim.SetTrigger("Spot");
                 }
-               
-                    
-
                 
                 aggroTimer = aggroTime;
                 idleTimer = 0f;
@@ -73,6 +87,9 @@ public class EnemyMovement : MonoBehaviour
 
             if (aggroTimer > 0 && toTarget.magnitude > 2f && (!player.playingDead || toTarget.magnitude > aggroDistance))
             {
+                anim.SetBool("Walk", true);
+                anim.SetBool("Idle", false);
+                
                 Vector3 motion = toTarget;
                 motion.Normalize();
                 navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
@@ -88,6 +105,9 @@ public class EnemyMovement : MonoBehaviour
 
             else if (aggroTimer > 0 && player.playingDead && toTarget.magnitude <= aggroDistance)
             {
+                anim.SetBool("Idle", true);
+                anim.SetBool("Walk", false);
+
                 navMeshAgent.speed = 0f;
                 aggroTimer -= Time.deltaTime;
 
@@ -98,6 +118,8 @@ public class EnemyMovement : MonoBehaviour
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
                     
+                    anim.SetBool("Walk", true);
+                    anim.SetBool("Idle", false);
                     navMeshAgent.SetDestination(currentTarget.position);
                     audioSource.PlayOneShot(moveAudio);
                 }
@@ -106,7 +128,9 @@ public class EnemyMovement : MonoBehaviour
 
             else if (aggroTimer <= 0 && toTarget.magnitude > 2f && idleTimer <= 0)
             {
-                
+                anim.SetBool("Walk", true);
+                anim.SetBool("Idle", false);
+
                 Vector3 motion = toTarget;
                 motion.Normalize();
                 navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
@@ -144,8 +168,14 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        else if(!rb.isKinematic)
+        else if(!rb.isKinematic || sleeping)
+        {
             navMeshAgent.speed = 0f;
+            anim.SetBool("Sleep", true);
+
+            if(!sleepParticles.isPlaying)
+                sleepParticles.Play();
+        }
     }
 
     public void ToggleSpectateCamera()
