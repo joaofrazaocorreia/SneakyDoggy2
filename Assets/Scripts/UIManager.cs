@@ -304,8 +304,8 @@ public class UIManager : MonoBehaviour
 
         foreach(EnemyMovement e in enemies)
         {
-            if(e)
-                e.gameObject.SetActive(enemiesEnabled);
+            if(e && !e.OriginallySleeping)
+                e.sleeping = !enemiesEnabled;
         }
     }
 

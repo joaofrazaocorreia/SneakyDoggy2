@@ -67,12 +67,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 playingDead = true;
                 velocity = Vector3.zero;
+                controller.enabled = false;
                 anim.SetBool("PlayDead",true);
             }
 
             else if (Input.GetKey(KeyCode.Q)==false)
             {
                 playingDead = false;
+                controller.enabled = true;
                 anim.SetBool("PlayDead",false);
 
             }

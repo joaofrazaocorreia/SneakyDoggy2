@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private bool sleeping = false;
+    public bool sleeping = false;
     public float moveSpeed = 4f;
     public float idleTime = 5f;
     public float aggroTime = 2f;
@@ -25,6 +25,8 @@ public class EnemyMovement : MonoBehaviour
     private float aggroTimer;
     private float idleTimer;
     private Transform currentTarget;
+    private bool originallySleeping;
+    public bool OriginallySleeping {get => originallySleeping;}
     
 
     // Start is called before the first frame update
@@ -38,6 +40,7 @@ public class EnemyMovement : MonoBehaviour
         idleTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
         moveSpeed *= 3f;
+        originallySleeping = sleeping;
 
         navMeshAgent.SetDestination(currentTarget.position);
     }
