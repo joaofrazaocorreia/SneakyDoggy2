@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bushes
-  m_Shader: {fileID: -6465566751694194690, guid: dd952b3e7ede5f84980a1e5884e3e828, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 6e582bac607eb60428b9e002f9ca369c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

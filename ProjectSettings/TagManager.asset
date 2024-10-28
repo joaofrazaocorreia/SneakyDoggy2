@@ -7,14 +7,15 @@ TagManager:
   - Enemy
   - Objective
   - Entrance
+  - Occlusive
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ignore Enemies
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
