@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private bool useTimeLimit = false;
     private EventSystem eventSystem;
     public LevelAudioManager levelAudioManager;
     public GameObject winScreen;
@@ -106,7 +107,7 @@ public class UIManager : MonoBehaviour
             TogglePause();
         }
 
-        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf)
+        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && useTimeLimit)
         {
             timeLimit -= Time.deltaTime;
 

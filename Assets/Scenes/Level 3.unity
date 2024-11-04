@@ -1725,6 +1725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b05abdf9fab9c48bec7145bd177e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useTimeLimit: 0
   levelAudioManager: {fileID: 509929014}
   winScreen: {fileID: 1002297131}
   loseScreen: {fileID: 2139525056}
@@ -5926,7 +5927,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &568795848
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13041,7 +13042,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1219077955
 MonoBehaviour:
   m_ObjectHideFlags: 0
