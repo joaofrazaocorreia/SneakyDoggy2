@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Score: 00000'
+  m_text: 'Pontos: 00000'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a8d13eb27dc68874caded43156883d70, type: 2}
   m_sharedMaterial: {fileID: -7092088065619408855, guid: a8d13eb27dc68874caded43156883d70, type: 2}
@@ -10338,14 +10338,14 @@ RectTransform:
   m_GameObject: {fileID: 951440198}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.188445, y: 1, z: 1}
+  m_LocalScale: {x: 2.5545292, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1192261014}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 303.00012, y: 0}
+  m_AnchoredPosition: {x: 312.9, y: 0}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &951440200
