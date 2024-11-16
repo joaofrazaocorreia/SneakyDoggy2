@@ -157,7 +157,7 @@ public class UIManager : MonoBehaviour
         loseScreen.SetActive(true);
         eventSystem.SetSelectedGameObject(loseScreenFirstButton);
         levelAudioManager.PlayLevelLose();
-        scoreText.text = "Score: 00000";
+        scoreText.text = "Pontos: 00000";
     }
 
     public void GetObjective(GameObject objective)
@@ -312,7 +312,7 @@ public class UIManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        string scoreString = "Score: ";
+        string scoreString = "Pontos: ";
         score += amount;
 
 
