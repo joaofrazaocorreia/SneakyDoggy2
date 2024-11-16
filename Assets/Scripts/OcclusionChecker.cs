@@ -20,8 +20,6 @@ public class OcclusionChecker : MonoBehaviour
     {
         if(!transparentObstacles.Contains(collision.gameObject) && collision.gameObject.tag == "Occlusive")
         {
-            Debug.Log("has collided with " + collision.gameObject.name);
-
             transparentObstacles.Add(collision.gameObject);
 
             foreach(MeshRenderer mr in collision.gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -35,8 +33,6 @@ public class OcclusionChecker : MonoBehaviour
     {
         if(transparentObstacles.Contains(collision.gameObject))
         {
-            Debug.Log("no longer colliding with " + collision.gameObject.name);
-
             transparentObstacles.Remove(collision.gameObject);
 
             foreach(MeshRenderer mr in collision.gameObject.GetComponentsInChildren<MeshRenderer>())

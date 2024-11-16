@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public float idleTime = 5f;
     public float aggroTime = 2f;
     public float aggroDistance = 4f;
+    public float detectReactionTime = 2f;
     public Transform[] movementTargets;
     public PlayerMovement player;
     public GameObject cameraRig;
@@ -24,13 +25,14 @@ public class EnemyMovement : MonoBehaviour
     private UIManager UIManager;
     private float aggroTimer;
     private float idleTimer;
+    private float detectReactionTimer;
     private Transform currentTarget;
     private bool originallySleeping;
     public bool OriginallySleeping {get => originallySleeping;}
     
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -38,6 +40,7 @@ public class EnemyMovement : MonoBehaviour
         UIManager = player.uiManager;
         aggroTimer = 0f;
         idleTimer = 0f;
+        detectReactionTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
         moveSpeed *= 3f;
         originallySleeping = sleeping;
@@ -45,8 +48,8 @@ public class EnemyMovement : MonoBehaviour
         navMeshAgent.SetDestination(currentTarget.position);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
         if (!player.gameStopped && !UIManager.isPaused && !rb.isKinematic && !sleeping)
         {
@@ -69,23 +72,57 @@ public class EnemyMovement : MonoBehaviour
             }
             Vector3 toTarget = currentTarget.position - transform.position;
 
-            if ((player.transform.position - transform.position).magnitude <= aggroDistance && !player.playingDead)
+            if (((player.transform.position - transform.position).magnitude <= aggroDistance)
+                || (aggroTimer > 0 && toTarget.magnitude > aggroDistance))
             {
-                if (currentTarget != player.transform)
+                if(!player.playingDead)
                 {
-                    audioSource.PlayOneShot(detectAudio);
-                    anim.SetTrigger("Spot");
-                }
-                
-                aggroTimer = aggroTime;
-                idleTimer = 0f;
-                currentTarget = player.transform;
-                toTarget = currentTarget.position - transform.position;
+                    if (currentTarget != player.transform)
+                    {
+                        audioSource.PlayOneShot(detectAudio);
+                        anim.SetTrigger("Spot");
+                        detectReactionTimer = detectReactionTime;
+                        navMeshAgent.speed = 0f;
+                        navMeshAgent.SetDestination(transform.position);
 
-                navMeshAgent.SetDestination(currentTarget.position);
+                        Debug.Log($"{transform.name} detected Player");
+                    }
+                    
+                    aggroTimer = aggroTime;
+                    idleTimer = 0f;
+                    currentTarget = player.transform;
+                    toTarget = currentTarget.position - transform.position;
+                }
+
+                if(detectReactionTimer > 0)
+                {
+                    anim.SetBool("Idle", true);
+                    anim.SetBool("Walk", false);
+
+                    detectReactionTimer -= Time.deltaTime;
+
+                    navMeshAgent.speed = 0f;
+
+                    if(detectReactionTimer <= 0)
+                    {
+                        anim.SetBool("Walk", true);
+                        anim.SetBool("Idle", false);
+                        anim.SetBool("EndSpot", true);
+
+                        navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
+                    }
+                }
+
+                else
+                {
+                    navMeshAgent.SetDestination(currentTarget.position);
+                }
             }
 
-            if (aggroTimer > 0 && toTarget.magnitude > 2f && (!player.playingDead || toTarget.magnitude > aggroDistance))
+
+
+            if (aggroTimer > 0 && toTarget.magnitude > 1.5f &&
+                (!player.playingDead || toTarget.magnitude > aggroDistance))
             {
                 anim.SetBool("Walk", true);
                 anim.SetBool("Idle", false);
@@ -114,6 +151,8 @@ public class EnemyMovement : MonoBehaviour
                 if (aggroTimer <= 0)
                 {
                     Transform prevTarget = currentTarget;
+                    detectReactionTimer = 0;
+                    anim.SetBool("EndSpot", true);
 
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
@@ -126,12 +165,13 @@ public class EnemyMovement : MonoBehaviour
 
             }
 
-            else if (aggroTimer <= 0 && toTarget.magnitude > 2f && idleTimer <= 0)
+            else if (aggroTimer <= 0 && toTarget.magnitude > 1.5f && idleTimer <= 0)
             {
                 anim.SetBool("Walk", true);
                 anim.SetBool("Idle", false);
+                anim.SetBool("EndSpot", false);
 
-                Vector3 motion = toTarget;
+                Vector3 motion = transform.forward;
                 motion.Normalize();
                 navMeshAgent.speed = moveSpeed * (moveSpeedSlider.value/100);
 
@@ -145,7 +185,6 @@ public class EnemyMovement : MonoBehaviour
 
             else if (aggroTimer <= 0 && toTarget.magnitude <= 2f && idleTimer <= 0)
             {
-                
                 idleTimer = idleTime;
             }
 
