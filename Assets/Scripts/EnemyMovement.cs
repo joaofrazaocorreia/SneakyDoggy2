@@ -18,6 +18,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private AudioClip detectAudio;
     [SerializeField] private AudioClip moveAudio;
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject detectSymbol;
 
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
@@ -44,6 +45,7 @@ public class EnemyMovement : MonoBehaviour
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
         moveSpeed *= 3f;
         originallySleeping = sleeping;
+        detectSymbol.SetActive(false);
 
         navMeshAgent.SetDestination(currentTarget.position);
     }
@@ -80,7 +82,10 @@ public class EnemyMovement : MonoBehaviour
                     if (currentTarget != player.transform)
                     {
                         audioSource.PlayOneShot(detectAudio);
+                        anim.SetBool("EndSpot", false);
                         anim.SetTrigger("Spot");
+
+                        detectSymbol.SetActive(true);
                         detectReactionTimer = detectReactionTime;
                         navMeshAgent.speed = 0f;
                         navMeshAgent.SetDestination(transform.position);
@@ -153,6 +158,7 @@ public class EnemyMovement : MonoBehaviour
                     Transform prevTarget = currentTarget;
                     detectReactionTimer = 0;
                     anim.SetBool("EndSpot", true);
+                    detectSymbol.SetActive(false);
 
                     while (currentTarget == prevTarget)
                         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
@@ -169,7 +175,6 @@ public class EnemyMovement : MonoBehaviour
             {
                 anim.SetBool("Walk", true);
                 anim.SetBool("Idle", false);
-                anim.SetBool("EndSpot", false);
 
                 Vector3 motion = transform.forward;
                 motion.Normalize();
