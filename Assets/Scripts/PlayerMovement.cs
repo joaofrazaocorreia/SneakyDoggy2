@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!gameStopped && !uiManager.isPaused)
         {
-            if (Input.GetKey(KeyCode.Q))
+            if (ControllerInput.Instance.Button2Trigger)
             {
                 playingDead = true;
                 velocity = Vector3.zero;
@@ -71,12 +71,11 @@ public class PlayerMovement : MonoBehaviour
                 anim.SetBool("PlayDead",true);
             }
 
-            else if (Input.GetKey(KeyCode.Q)==false)
+            else
             {
                 playingDead = false;
                 controller.enabled = true;
                 anim.SetBool("PlayDead",false);
-
             }
             
 
@@ -98,8 +97,8 @@ public class PlayerMovement : MonoBehaviour
                 model.transform.localRotation = Quaternion.Euler(0, model.transform.eulerAngles.y, 0);
                 
 
-                velocity.x = Input.GetAxisRaw("Strafe");
-                velocity.z = Input.GetAxisRaw("Forward");
+                velocity.x = ControllerInput.Instance.Axis_X;
+                velocity.z = ControllerInput.Instance.Axis_Y;
 
                 velocity.Normalize();
                 motion = velocity * moveSpeed;

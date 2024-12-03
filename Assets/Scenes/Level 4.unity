@@ -1570,6 +1570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b05abdf9fab9c48bec7145bd177e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMainMenu: 0
   useTimeLimit: 0
   levelAudioManager: {fileID: 1127950635}
   winScreen: {fileID: 1471090213}
@@ -1577,15 +1578,31 @@ MonoBehaviour:
   pauseMenu: {fileID: 1197082140}
   settingsMenu: {fileID: 46828654}
   creditsMenu: {fileID: 46828654}
-  winScreenFirstButton: {fileID: 1159379853}
-  loseScreenFirstButton: {fileID: 1316665062}
-  pauseMenuFirstButton: {fileID: 628073101}
-  settingsMenuFirstButton: {fileID: 1959620604}
-  creditsMenuFirstButton: {fileID: 1959620604}
+  levelSelectMenu: {fileID: 46828654}
+  winScreenButtons:
+  - {fileID: 558344538}
+  - {fileID: 637551814}
+  - {fileID: 531768277}
+  loseScreenButtons:
+  - {fileID: 1316665062}
+  - {fileID: 1110424469}
+  pauseMenuButtons:
+  - {fileID: 628073101}
+  - {fileID: 210004715}
+  - {fileID: 1411374719}
+  settingsMenuButtons:
+  - {fileID: 1959620604}
+  - {fileID: 692276645}
+  - {fileID: 969771382}
+  - {fileID: 266878792}
+  - {fileID: 351897403}
+  creditsMenuButtons: []
+  levelSelectMenuButtons: []
   objectiveIndicator: {fileID: 1691282513}
   arrowsCheckmark: {fileID: 600205743}
   glowCheckmark: {fileID: 1250512102}
-  smoothTurnCheckmark: {fileID: 304803812}
+  keyboardInputCheckmark: {fileID: 0}
+  controllerInputCheckmark: {fileID: 0}
   enemySpeedSlider: {fileID: 969771382}
   enemiesCheckmark: {fileID: 2137128101}
   directionalArrows:
@@ -1601,8 +1618,10 @@ MonoBehaviour:
   scoreText: {fileID: 234150644}
   winScoreText: {fileID: 659369041}
   timeLimit: 120
+  UIButtonMoveCooldown: 0.5
   isPaused: 0
-  smoothTurnEnabled: 0
+  currentButtons: []
+  currentButtonIndex: 0
 --- !u!4 &159994896
 Transform:
   m_ObjectHideFlags: 0
@@ -1751,7 +1770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 628073101}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &186040104
@@ -2665,6 +2684,50 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &235423201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 235423203}
+  - component: {fileID: 235423202}
+  m_Layer: 0
+  m_Name: ControllerInput
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &235423202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235423201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706ef4b54aa782c469bb33121cf9c183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &235423203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235423201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.106058, y: -11.714004, z: -4.7532687}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240982564
 GameObject:
   m_ObjectHideFlags: 0
@@ -10134,7 +10197,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.25
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: bcc2f54467be6d743bf4cce0717882ae, type: 2}
   m_BuildHeightMesh: 0
@@ -17457,7 +17520,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mutio bem!
+  m_text: Muito bem!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a8d13eb27dc68874caded43156883d70, type: 2}
   m_sharedMaterial: {fileID: -7092088065619408855, guid: a8d13eb27dc68874caded43156883d70, type: 2}
@@ -30410,3 +30473,4 @@ SceneRoots:
   - {fileID: 627719673}
   - {fileID: 1409171908}
   - {fileID: 1127950636}
+  - {fileID: 235423203}

@@ -1639,6 +1639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b05abdf9fab9c48bec7145bd177e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMainMenu: 0
   useTimeLimit: 0
   levelAudioManager: {fileID: 1894459899}
   winScreen: {fileID: 267794768}
@@ -1646,15 +1647,31 @@ MonoBehaviour:
   pauseMenu: {fileID: 445666359}
   settingsMenu: {fileID: 1249056112}
   creditsMenu: {fileID: 1249056112}
-  winScreenFirstButton: {fileID: 1252606509}
-  loseScreenFirstButton: {fileID: 1906726167}
-  pauseMenuFirstButton: {fileID: 94317731}
-  settingsMenuFirstButton: {fileID: 1825809813}
-  creditsMenuFirstButton: {fileID: 1825809813}
+  levelSelectMenu: {fileID: 1249056112}
+  winScreenButtons:
+  - {fileID: 1252606509}
+  - {fileID: 1954329788}
+  - {fileID: 550764379}
+  loseScreenButtons:
+  - {fileID: 1906726167}
+  - {fileID: 1156717382}
+  pauseMenuButtons:
+  - {fileID: 94317731}
+  - {fileID: 700387349}
+  - {fileID: 491164701}
+  settingsMenuButtons:
+  - {fileID: 1825809813}
+  - {fileID: 1765094224}
+  - {fileID: 192390828}
+  - {fileID: 1199424440}
+  - {fileID: 1797039515}
+  creditsMenuButtons: []
+  levelSelectMenuButtons: []
   objectiveIndicator: {fileID: 1691282513}
   arrowsCheckmark: {fileID: 716481195}
   glowCheckmark: {fileID: 1877911432}
-  smoothTurnCheckmark: {fileID: 334003042}
+  keyboardInputCheckmark: {fileID: 0}
+  controllerInputCheckmark: {fileID: 0}
   enemySpeedSlider: {fileID: 192390828}
   enemiesCheckmark: {fileID: 982246416}
   directionalArrows:
@@ -1668,8 +1685,10 @@ MonoBehaviour:
   scoreText: {fileID: 1728972992}
   winScoreText: {fileID: 1971460490}
   timeLimit: 90
+  UIButtonMoveCooldown: 0.5
   isPaused: 0
-  smoothTurnEnabled: 0
+  currentButtons: []
+  currentButtonIndex: 0
 --- !u!4 &159994896
 Transform:
   m_ObjectHideFlags: 0
@@ -2044,7 +2063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 94317731}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &186040104
@@ -2926,6 +2945,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 716956329121739870, guid: 1e22c2b42306e72458b544db61cbe66d, type: 3}
   m_PrefabInstance: {fileID: 245926755}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &248071109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 248071111}
+  - component: {fileID: 248071110}
+  m_Layer: 0
+  m_Name: ControllerInput
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &248071110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248071109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706ef4b54aa782c469bb33121cf9c183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &248071111
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248071109}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.106058, y: -11.714004, z: -4.7532687}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &267794768
 GameObject:
   m_ObjectHideFlags: 0
@@ -18578,7 +18641,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.25
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: e1ae7334f178f4a47a23a297a85655c4, type: 2}
   m_BuildHeightMesh: 0
@@ -21475,3 +21538,4 @@ SceneRoots:
   - {fileID: 627719673}
   - {fileID: 98917719}
   - {fileID: 1894459900}
+  - {fileID: 248071111}

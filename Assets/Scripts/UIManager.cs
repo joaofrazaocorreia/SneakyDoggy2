@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,45 +7,58 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private bool isMainMenu = false;
     [SerializeField] private bool useTimeLimit = false;
-    private EventSystem eventSystem;
-    public LevelAudioManager levelAudioManager;
-    public GameObject winScreen;
-    public GameObject loseScreen;
-    public GameObject pauseMenu;
-    public GameObject settingsMenu;
-    public GameObject creditsMenu;
-    public GameObject winScreenFirstButton;
-    public GameObject loseScreenFirstButton;
-    public GameObject pauseMenuFirstButton;
-    public GameObject settingsMenuFirstButton;
-    public GameObject creditsMenuFirstButton;
-    public GameObject objectiveIndicator;
-    public GameObject arrowsCheckmark;
-    public GameObject glowCheckmark;
-    public GameObject smoothTurnCheckmark;
-    public GameObject enemySpeedSlider;
-    public GameObject enemiesCheckmark;
-    public GameObject[] directionalArrows;
-    public GameObject[] helpingGlows;
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI winScoreText;
+    [SerializeField] private LevelAudioManager levelAudioManager;
+    [SerializeField] private GameObject winScreen;
+    [SerializeField] private GameObject loseScreen;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private GameObject creditsMenu;
+    [SerializeField] private GameObject levelSelectMenu;
+    [SerializeField] private List<GameObject> winScreenButtons;
+    [SerializeField] private List<GameObject> loseScreenButtons;
+    [SerializeField] private List<GameObject> pauseMenuButtons;
+    [SerializeField] private List<GameObject> settingsMenuButtons;
+    [SerializeField] private List<GameObject> creditsMenuButtons;
+    [SerializeField] private List<GameObject> levelSelectMenuButtons;
+    [SerializeField] private GameObject objectiveIndicator;
+    [SerializeField] private GameObject arrowsCheckmark;
+    [SerializeField] private GameObject glowCheckmark;
+    [SerializeField] private GameObject keyboardInputCheckmark;
+    [SerializeField] private GameObject controllerInputCheckmark;
+    [SerializeField] private GameObject enemySpeedSlider;
+    [SerializeField] private GameObject enemiesCheckmark;
+    [SerializeField] private GameObject[] directionalArrows;
+    [SerializeField] private GameObject[] helpingGlows;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI winScoreText;
     [SerializeField] private float timeLimit = 90f;
+    [SerializeField] private float UIButtonMoveCooldown = 0.5f;
 
     [HideInInspector] public bool isPaused;
-    [HideInInspector] public bool smoothTurnEnabled;
+    [HideInInspector] public List<GameObject> currentButtons;
+    [HideInInspector] public int currentButtonIndex;
+
+    private EventSystem eventSystem;
     private bool arrowsEnabled;
     private bool glowEnabled;
     private int enemySpeedSliderValue;
     private bool enemiesEnabled;
     private EnemyMovement[] enemies;
     private int score;
+    private bool button1Buffer;
+    private bool button2Buffer;
+    private float UIButtonMoveTimer;
 
     private void Start()
     {
         eventSystem = FindObjectOfType<EventSystem>();
         score = 0;
+        button1Buffer = false;
+        button2Buffer = false;
+        UIButtonMoveTimer = 0f;
 
         isPaused = pauseMenu.activeSelf;
         CheckTimeScale();
@@ -54,9 +68,6 @@ public class UIManager : MonoBehaviour
 
         glowEnabled = false;
         glowCheckmark.SetActive(false);
-
-        smoothTurnEnabled = true;
-        smoothTurnCheckmark.SetActive(true);
 
         enemySpeedSliderValue = 100;
 
@@ -79,12 +90,6 @@ public class UIManager : MonoBehaviour
             glowCheckmark.SetActive(true);
         }
 
-        if (PlayerPrefs.GetInt("SmoothTurn", 1) == 1)
-        {
-            smoothTurnEnabled = true;
-            smoothTurnCheckmark.SetActive(true);
-        }
-
         if (PlayerPrefs.GetInt("EnemySpeed", 100) != 100)
         {
             enemySpeedSliderValue = PlayerPrefs.GetInt("EnemySpeed");
@@ -98,16 +103,16 @@ public class UIManager : MonoBehaviour
         }
         
         UpdateSettings();
+
+        if(isMainMenu)
+            SetCurrentUIButtons(pauseMenuButtons);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
+        CheckControls();
 
-        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && useTimeLimit)
+        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && useTimeLimit && !isMainMenu)
         {
             timeLimit -= Time.deltaTime;
 
@@ -144,10 +149,71 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void CheckControls()
+    {
+        ControllerInput controllerInput = ControllerInput.Instance;
+        
+        
+        if(controllerInput.Axis_Y != 0 && (isPaused || isMainMenu))
+        {
+            if(UIButtonMoveTimer > 0)
+            {
+                UIButtonMoveTimer -= 0.01f;
+            }
+
+            else
+            {
+                UIButtonMoveTimer = UIButtonMoveCooldown;
+
+                if(controllerInput.Axis_Y < 0)
+                {
+                    currentButtonIndex += 1;
+
+                    if(currentButtonIndex >= currentButtons.Count)
+                        currentButtonIndex = 0;
+
+                    eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
+                }
+
+                else if(controllerInput.Axis_Y > 0)
+                {
+                    currentButtonIndex -= 1;
+
+                    if(currentButtonIndex < 0)
+                        currentButtonIndex = currentButtons.Count - 1;
+
+                    eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
+                }
+            }
+        }
+
+        else UIButtonMoveTimer = 0f;
+
+
+        if (controllerInput.Button1Trigger && !button1Buffer && !isMainMenu)
+        {
+            TogglePause();
+            button1Buffer = true;
+        }
+
+        else if (!controllerInput.Button1Trigger && button1Buffer)
+            button1Buffer = false;
+
+
+        if(controllerInput.Button2Trigger && !button2Buffer && (isPaused || isMainMenu))
+        {
+            eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
+            button2Buffer = true;
+        }
+
+        else if (!controllerInput.Button2Trigger && button2Buffer)
+            button2Buffer = false;
+    }
+
     public void Win()
     {
         winScreen.SetActive(true);
-        eventSystem.SetSelectedGameObject(winScreenFirstButton);
+        SetCurrentUIButtons(winScreenButtons);
         levelAudioManager.PlayLevelWin();
         AddScore(1000 + (int)Mathf.Floor(timeLimit/60 * 100));
     }
@@ -155,7 +221,7 @@ public class UIManager : MonoBehaviour
     public void Lose()
     {
         loseScreen.SetActive(true);
-        eventSystem.SetSelectedGameObject(loseScreenFirstButton);
+        SetCurrentUIButtons(loseScreenButtons);
         levelAudioManager.PlayLevelLose();
         scoreText.text = "Pontos: 00000";
     }
@@ -178,7 +244,7 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(!pauseMenu.activeSelf);
         
         if(pauseMenu.activeSelf)
-            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
+            SetCurrentUIButtons(pauseMenuButtons);
 
         isPaused = pauseMenu.activeSelf;
 
@@ -199,9 +265,9 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(!settingsMenu.activeSelf);
 
         if(settingsMenu.activeSelf)
-            eventSystem.SetSelectedGameObject(settingsMenuFirstButton);
+            SetCurrentUIButtons(settingsMenuButtons);
         else
-            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
+            SetCurrentUIButtons(pauseMenuButtons);
     }
 
     public void ToggleCreditsMenu()
@@ -210,9 +276,20 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(!creditsMenu.activeSelf);
         
         if(creditsMenu.activeSelf)
-            eventSystem.SetSelectedGameObject(creditsMenuFirstButton);
+            SetCurrentUIButtons(creditsMenuButtons);
         else
-            eventSystem.SetSelectedGameObject(pauseMenuFirstButton);
+            SetCurrentUIButtons(pauseMenuButtons);
+    }
+
+    public void ToggleLevelSelectMenu()
+    {
+        levelSelectMenu.SetActive(!levelSelectMenu.activeSelf);
+        pauseMenu.SetActive(!levelSelectMenu.activeSelf);
+        
+        if(levelSelectMenu.activeSelf)
+            SetCurrentUIButtons(levelSelectMenuButtons);
+        else
+            SetCurrentUIButtons(pauseMenuButtons);
     }
 
     public void LoadScene(int n)
@@ -250,19 +327,23 @@ public class UIManager : MonoBehaviour
         UpdateSettings();
     }
 
-    public void ToggleSmoothTurning()
+    public void ToggleInputMode(bool? toggle)
     {
-        smoothTurnEnabled = !smoothTurnEnabled;
-        smoothTurnCheckmark.SetActive(smoothTurnEnabled);
+        toggle ??= !ControllerInput.Instance.UsingArduino;
 
-        if(smoothTurnEnabled)
-            PlayerPrefs.SetInt("SmoothTurn", 1);
-        else
-            PlayerPrefs.SetInt("SmoothTurn", 0);
+        if((bool)toggle)
+        {
+            ControllerInput.Instance.OpenSerial();
+            controllerInputCheckmark.SetActive(true);
+            keyboardInputCheckmark.SetActive(false);
+        }
 
-            
-        PlayerPrefs.Save();
-        UpdateSettings();
+        if(!(bool)toggle)
+        {
+            ControllerInput.Instance.CloseSerial();
+            controllerInputCheckmark.SetActive(false);
+            keyboardInputCheckmark.SetActive(true);
+        }
     }
 
     public void ChangeEnemySpeed()
@@ -308,6 +389,18 @@ public class UIManager : MonoBehaviour
             if(e && !e.OriginallySleeping)
                 e.sleeping = !enemiesEnabled;
         }
+    }
+
+    public void SetCurrentUIButtons(List<GameObject> buttons)
+    {
+        foreach(GameObject go in buttons)
+        {
+            Debug.Log(go.name);
+        }
+        currentButtons = buttons;
+        currentButtonIndex = 0;
+        eventSystem.SetSelectedGameObject(currentButtons[0]);
+        Debug.Log("current: " + eventSystem.currentSelectedGameObject);
     }
 
     public void AddScore(int amount)
