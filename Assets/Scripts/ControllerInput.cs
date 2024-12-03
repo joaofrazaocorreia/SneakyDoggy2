@@ -10,9 +10,11 @@ public class ControllerInput : MonoBehaviour
 {
     public static ControllerInput Instance;
     private SerialPort serial;
+    private UIManager uiManager;
     private string arduinoInput;
     private bool usingArduino;
     public bool UsingArduino {get => usingArduino;}
+    private int portsAvailable = 0;
 
     private bool button1Trigger = false;
     private bool button2Trigger = false;
@@ -26,6 +28,8 @@ public class ControllerInput : MonoBehaviour
 
     private void Start()
     {
+        UpdateUIManager();
+
         if(Instance != null)
         {
             Destroy(gameObject);
@@ -36,6 +40,7 @@ public class ControllerInput : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            portsAvailable = SerialPort.GetPortNames().Count();
             OpenSerial();
         }
     }
@@ -44,7 +49,7 @@ public class ControllerInput : MonoBehaviour
     {
         if(usingArduino)
         {
-            if(serial.BytesToRead > 0)
+            if(serial != null && serial.BytesToRead > 0)
             {
                 arduinoInput = serial.ReadLine();
 
@@ -110,7 +115,7 @@ public class ControllerInput : MonoBehaviour
 
     public void OpenSerial()
     {
-        usingArduino = false;
+        CloseSerial();
 
         foreach(string s in SerialPort.GetPortNames())
         {
@@ -119,6 +124,7 @@ public class ControllerInput : MonoBehaviour
                 serial = new SerialPort(s, 9600);
                 serial.Open();
                 usingArduino = true;
+                uiManager.ToggleInputCheckmarks(true);
                 Debug.Log($"Connected to Arduino on port \"{s}\".");
                 break;
             }
@@ -131,13 +137,25 @@ public class ControllerInput : MonoBehaviour
 
         if(!usingArduino)
         {
+            uiManager.ToggleInputCheckmarks(false);
             Debug.LogWarning("Unable to connect to a port - Inputs will switch to the PC Input system.");
         }
     }
 
     public void CloseSerial()
     {
-        serial.Close();
-        usingArduino = false;
+        uiManager.ToggleInputCheckmarks(false);
+        
+        if(usingArduino)
+        {
+            serial.Close();
+            usingArduino = false;
+            Debug.Log($"Disconnected from Arduino.");
+        }
+    }
+
+    private void UpdateUIManager()
+    {
+        uiManager = FindAnyObjectByType<UIManager>();
     }
 }

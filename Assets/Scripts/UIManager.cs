@@ -46,18 +46,21 @@ public class UIManager : MonoBehaviour
     private bool glowEnabled;
     private int enemySpeedSliderValue;
     private bool enemiesEnabled;
+    private bool inputMode;
     private EnemyMovement[] enemies;
     private int score;
     private bool button1Buffer;
     private bool button2Buffer;
+    public bool Button1Buffer {get=> button1Buffer;}
+    public bool Button2Buffer {get=> button2Buffer;}
     private float UIButtonMoveTimer;
 
     private void Start()
     {
         eventSystem = FindObjectOfType<EventSystem>();
         score = 0;
-        button1Buffer = false;
-        button2Buffer = false;
+        button1Buffer = true;
+        button2Buffer = true;
         UIButtonMoveTimer = 0f;
 
         isPaused = pauseMenu.activeSelf;
@@ -101,6 +104,12 @@ public class UIManager : MonoBehaviour
             enemiesEnabled = false;
             enemiesCheckmark.SetActive(false);
         }
+
+        if (PlayerPrefs.GetInt("InputMode", 0) == 1)
+        {
+            inputMode = true;
+            ToggleInputCheckmarks(true);
+        }
         
         UpdateSettings();
 
@@ -110,7 +119,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        CheckControls();
+        CheckControllerBuffer();
 
         if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && useTimeLimit && !isMainMenu)
         {
@@ -149,7 +158,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void CheckControls()
+    private void CheckControllerBuffer()
     {
         ControllerInput controllerInput = ControllerInput.Instance;
         
@@ -200,8 +209,9 @@ public class UIManager : MonoBehaviour
             button1Buffer = false;
 
 
-        if(controllerInput.Button2Trigger && !button2Buffer && (isPaused || isMainMenu))
+        if(controllerInput.Button2Trigger && !button2Buffer && (isPaused || isMainMenu || winScreen.activeSelf || loseScreen.activeSelf))
         {
+            if(eventSystem.currentSelectedGameObject != null && eventSystem.currentSelectedGameObject.GetComponent<Button>())
             eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
             button2Buffer = true;
         }
@@ -238,17 +248,23 @@ public class UIManager : MonoBehaviour
     }
 
     public void TogglePause()
-    {
-        settingsMenu.SetActive(false);
+    {   
+        UIButtonMoveTimer = UIButtonMoveCooldown;
 
-        pauseMenu.SetActive(!pauseMenu.activeSelf);
-        
-        if(pauseMenu.activeSelf)
-            SetCurrentUIButtons(pauseMenuButtons);
 
-        isPaused = pauseMenu.activeSelf;
+        if(!winScreen.activeSelf && !loseScreen.activeSelf)
+        {
+            settingsMenu.SetActive(false);
 
-        CheckTimeScale();
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            
+            if(pauseMenu.activeSelf)
+                SetCurrentUIButtons(pauseMenuButtons);
+
+            isPaused = pauseMenu.activeSelf;
+
+            CheckTimeScale();
+        }
     }
 
     private void CheckTimeScale()
@@ -327,20 +343,49 @@ public class UIManager : MonoBehaviour
         UpdateSettings();
     }
 
-    public void ToggleInputMode(bool? toggle)
+    /// <summary>
+    /// (The arduino will be updated in the future
+    /// to send its own key inputs so this is temporary)
+    /// </summary>
+    /// <param name="toggle">True = Controller inputs; False = Keyboard inputs.</param>
+    public void ToggleInputMode(bool toggle)
     {
-        toggle ??= !ControllerInput.Instance.UsingArduino;
-
-        if((bool)toggle)
+        if(toggle)
         {
             ControllerInput.Instance.OpenSerial();
+        }
+
+        if(!toggle)
+        {
+            ControllerInput.Instance.CloseSerial();
+        }
+    }
+
+    /// <summary>
+    /// Same as ToggleInputMode() but only updates the checkmarks in settings.
+    /// </summary>
+    /// <param name="toggle">True = Controller inputs; False = Keyboard inputs.</param>
+    public void ToggleInputCheckmarks(bool toggle)
+    {
+        inputMode = toggle;
+
+        if(inputMode)
+            PlayerPrefs.SetInt("InputMode", 1);
+        else
+            PlayerPrefs.SetInt("InputMode", 0);
+
+        PlayerPrefs.Save();
+        UpdateSettings();
+
+        
+        if(toggle)
+        {
             controllerInputCheckmark.SetActive(true);
             keyboardInputCheckmark.SetActive(false);
         }
 
-        if(!(bool)toggle)
+        if(!toggle)
         {
-            ControllerInput.Instance.CloseSerial();
             controllerInputCheckmark.SetActive(false);
             keyboardInputCheckmark.SetActive(true);
         }

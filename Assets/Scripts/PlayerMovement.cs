@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!gameStopped && !uiManager.isPaused)
         {
-            if (ControllerInput.Instance.Button2Trigger)
+            if (ControllerInput.Instance.Button2Trigger && !uiManager.Button2Buffer)
             {
                 playingDead = true;
                 velocity = Vector3.zero;
