@@ -54,6 +54,7 @@ public class UIManager : MonoBehaviour
     public bool Button1Buffer {get=> button1Buffer;}
     public bool Button2Buffer {get=> button2Buffer;}
     private float UIButtonMoveTimer;
+    private bool scrollUIButtonsHorizontally;
 
     private void Start()
     {
@@ -62,6 +63,7 @@ public class UIManager : MonoBehaviour
         button1Buffer = true;
         button2Buffer = true;
         UIButtonMoveTimer = 0f;
+        scrollUIButtonsHorizontally = false;
 
         isPaused = pauseMenu.activeSelf;
         CheckTimeScale();
@@ -161,9 +163,15 @@ public class UIManager : MonoBehaviour
     private void CheckControllerBuffer()
     {
         ControllerInput controllerInput = ControllerInput.Instance;
+        float axis;
+
+        if(scrollUIButtonsHorizontally)
+            axis = -controllerInput.Axis_X;
+        else
+            axis = controllerInput.Axis_Y;
+
         
-        
-        if(controllerInput.Axis_Y != 0 && (isPaused || isMainMenu))
+        if(axis != 0 && (isPaused || isMainMenu))
         {
             if(UIButtonMoveTimer > 0)
             {
@@ -174,7 +182,7 @@ public class UIManager : MonoBehaviour
             {
                 UIButtonMoveTimer = UIButtonMoveCooldown;
 
-                if(controllerInput.Axis_Y < 0)
+                if(axis < 0)
                 {
                     currentButtonIndex += 1;
 
@@ -184,7 +192,7 @@ public class UIManager : MonoBehaviour
                     eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
                 }
 
-                else if(controllerInput.Axis_Y > 0)
+                else if(axis > 0)
                 {
                     currentButtonIndex -= 1;
 
@@ -194,6 +202,25 @@ public class UIManager : MonoBehaviour
                     eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
                 }
             }
+        }
+
+        else if(controllerInput.Axis_X != 0 && currentButtons[currentButtonIndex].GetComponent<Slider>() && (isPaused || isMainMenu))
+        {
+            Slider slider = currentButtons[currentButtonIndex].GetComponent<Slider>();
+            float axis_X = controllerInput.Axis_X;
+
+            if(UIButtonMoveTimer <= 0)
+            { 
+                if(axis_X > 0)
+                    slider.value += 5;
+
+                else
+                    slider.value -= 5;
+
+                UIButtonMoveTimer = UIButtonMoveCooldown;
+            }
+
+            else UIButtonMoveTimer -= Time.deltaTime;
         }
 
         else UIButtonMoveTimer = 0f;
@@ -303,7 +330,7 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(!levelSelectMenu.activeSelf);
         
         if(levelSelectMenu.activeSelf)
-            SetCurrentUIButtons(levelSelectMenuButtons);
+            SetCurrentUIButtons(levelSelectMenuButtons, true);
         else
             SetCurrentUIButtons(pauseMenuButtons);
     }
@@ -436,16 +463,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetCurrentUIButtons(List<GameObject> buttons)
+    public void SetCurrentUIButtons(List<GameObject> buttons, bool scrollHorizontally = false)
     {
-        foreach(GameObject go in buttons)
-        {
-            Debug.Log(go.name);
-        }
         currentButtons = buttons;
         currentButtonIndex = 0;
         eventSystem.SetSelectedGameObject(currentButtons[0]);
-        Debug.Log("current: " + eventSystem.currentSelectedGameObject);
+        scrollUIButtonsHorizontally = scrollHorizontally;
     }
 
     public void AddScore(int amount)
