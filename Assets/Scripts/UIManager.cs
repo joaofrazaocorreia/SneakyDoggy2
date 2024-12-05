@@ -171,7 +171,7 @@ public class UIManager : MonoBehaviour
             axis = controllerInput.Axis_Y;
 
         
-        if((isPaused || isMainMenu) && axis != 0)
+        if((isPaused || isMainMenu || winScreen.activeSelf || loseScreen.activeSelf) && axis != 0)
         {
             if(UIButtonMoveTimer > 0)
             {
@@ -240,8 +240,10 @@ public class UIManager : MonoBehaviour
         if(controllerInput.Button2Trigger && !button2Buffer && (isPaused || isMainMenu || winScreen.activeSelf || loseScreen.activeSelf))
         {
             if(eventSystem.currentSelectedGameObject != null && eventSystem.currentSelectedGameObject.GetComponent<Button>())
-            eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
-            button2Buffer = true;
+            {
+                eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
+                button2Buffer = true;
+            }
         }
 
         else if (!controllerInput.Button2Trigger && button2Buffer)
