@@ -171,7 +171,7 @@ public class UIManager : MonoBehaviour
             axis = controllerInput.Axis_Y;
 
         
-        if(axis != 0 && (isPaused || isMainMenu))
+        if((isPaused || isMainMenu) && axis != 0)
         {
             if(UIButtonMoveTimer > 0)
             {
@@ -204,7 +204,8 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        else if(controllerInput.Axis_X != 0 && currentButtons[currentButtonIndex].GetComponent<Slider>() && (isPaused || isMainMenu))
+        else if((isPaused || isMainMenu) && controllerInput.Axis_X != 0 &&
+            currentButtons[currentButtonIndex].GetComponent<Slider>())
         {
             Slider slider = currentButtons[currentButtonIndex].GetComponent<Slider>();
             float axis_X = controllerInput.Axis_X;
