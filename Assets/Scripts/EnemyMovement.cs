@@ -33,7 +33,7 @@ public class EnemyMovement : MonoBehaviour
     
 
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();

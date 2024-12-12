@@ -60,6 +60,8 @@ public class UIManager : MonoBehaviour
     {
         eventSystem = FindObjectOfType<EventSystem>();
         score = 0;
+        ControllerInput.Instance.Button1Trigger = false;
+        ControllerInput.Instance.Button2Trigger = false;
         button1Buffer = true;
         button2Buffer = true;
         UIButtonMoveTimer = 0f;
@@ -113,10 +115,10 @@ public class UIManager : MonoBehaviour
             ToggleInputCheckmarks(true);
         }
         
-        UpdateSettings();
-
         if(isMainMenu)
             SetCurrentUIButtons(pauseMenuButtons);
+        else
+            UpdateSettings();
     }
 
     private void Update()
@@ -252,6 +254,8 @@ public class UIManager : MonoBehaviour
 
     public void Win()
     {
+        UIButtonMoveTimer = UIButtonMoveCooldown;
+
         winScreen.SetActive(true);
         SetCurrentUIButtons(winScreenButtons);
         levelAudioManager.PlayLevelWin();
@@ -260,6 +264,8 @@ public class UIManager : MonoBehaviour
 
     public void Lose()
     {
+        UIButtonMoveTimer = UIButtonMoveCooldown;
+
         loseScreen.SetActive(true);
         SetCurrentUIButtons(loseScreenButtons);
         levelAudioManager.PlayLevelLose();
@@ -355,7 +361,8 @@ public class UIManager : MonoBehaviour
 
             
         PlayerPrefs.Save();
-        UpdateSettings();
+        if(!isMainMenu)
+            UpdateSettings();
     }
 
     public void ToggleHelpingGlow()
@@ -370,7 +377,8 @@ public class UIManager : MonoBehaviour
 
             
         PlayerPrefs.Save();
-        UpdateSettings();
+        if(!isMainMenu)
+            UpdateSettings();
     }
 
     /// <summary>
@@ -405,7 +413,8 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("InputMode", 0);
 
         PlayerPrefs.Save();
-        UpdateSettings();
+        if(!isMainMenu)
+            UpdateSettings();
 
         
         if(toggle)
@@ -428,7 +437,8 @@ public class UIManager : MonoBehaviour
 
 
         PlayerPrefs.Save();
-        UpdateSettings();
+        if(!isMainMenu)
+            UpdateSettings();
     }
 
     public void ToggleEnemies()
@@ -442,7 +452,8 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("EnemyToggle", 0);
 
         PlayerPrefs.Save();
-        UpdateSettings();
+        if(!isMainMenu)
+            UpdateSettings();
     }
 
     private void UpdateSettings()
@@ -461,7 +472,7 @@ public class UIManager : MonoBehaviour
 
         foreach(EnemyMovement e in enemies)
         {
-            if(e && !e.OriginallySleeping)
+            if(!e.OriginallySleeping)
                 e.sleeping = !enemiesEnabled;
         }
     }
