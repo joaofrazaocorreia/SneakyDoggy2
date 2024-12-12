@@ -21,12 +21,12 @@ public class ControllerInput : MonoBehaviour
     private float axis_X = 0f;
     private float axis_Y = 0f;
 
-    public bool Button1Trigger {get => button1Trigger;}
-    public bool Button2Trigger {get => button2Trigger;}
+    public bool Button1Trigger {get => button1Trigger; set => button1Trigger = value;}
+    public bool Button2Trigger {get => button2Trigger; set => button2Trigger = value;}
     public float Axis_X {get => axis_X;}
     public float Axis_Y {get => axis_Y;}
 
-    private void Start()
+    private void Awake()
     {
         UpdateUIManager();
 
@@ -47,67 +47,53 @@ public class ControllerInput : MonoBehaviour
 
     private void Update()
     {
-        if(usingArduino)
+        if(Input.GetKeyDown(KeyCode.Escape))
+            button1Trigger = true;
+            
+        if(Input.GetKeyUp(KeyCode.Escape))
+            button1Trigger = false;
+
+        if(Input.GetKeyDown(KeyCode.Q))
+            button2Trigger = true;
+            
+        if(Input.GetKeyUp(KeyCode.Q))
+            button2Trigger = false;
+        
+
+        if(usingArduino && serial != null && serial.BytesToRead > 0)
         {
-            if(serial != null && serial.BytesToRead > 0)
+            arduinoInput = serial.ReadLine();
+
+            if(arduinoInput.Contains("JOYSTICK_X: "))
             {
-                arduinoInput = serial.ReadLine();
+                string newString = arduinoInput.Remove(0,"JOYSTICK_X: ".Count());
+                float value = float.Parse(newString);
 
-                if(arduinoInput.Contains("BUTTON1_DOWN"))
-                    button1Trigger = true;
+                if(value > 0)
+                    axis_X = 1;
+                else if(value < 0)
+                    axis_X = -1;
+                else
+                    axis_X = 0;
+            }
 
-                if(arduinoInput.Contains("BUTTON1_UP"))
-                    button1Trigger = false;
-
-                if(arduinoInput.Contains("BUTTON2_DOWN"))
-                    button2Trigger = true;
-
-                if(arduinoInput.Contains("BUTTON2_UP"))
-                    button2Trigger = false;
-
-                if(arduinoInput.Contains("JOYSTICK_X: "))
-                {
-                    string newString = arduinoInput.Remove(0,"JOYSTICK_X: ".Count());
-                    float value = float.Parse(newString);
-
-                    if(value > 0)
-                        axis_X = 1;
-                    else if(value < 0)
-                        axis_X = -1;
-                    else
-                        axis_X = 0;
-                }
-
-                if(arduinoInput.Contains("JOYSTICK_Y: "))
-                {
-                    string newString = arduinoInput.Remove(0,"JOYSTICK_Y: ".Count());
-                    float value = float.Parse(newString);
+            if(arduinoInput.Contains("JOYSTICK_Y: "))
+            {
+                string newString = arduinoInput.Remove(0,"JOYSTICK_Y: ".Count());
+                float value = float.Parse(newString);
 
 
-                    if(value > 0)
-                        axis_Y = 1;
-                    else if(value < 0)
-                        axis_Y = -1;
-                    else
-                        axis_Y = 0;
-                }
+                if(value > 0)
+                    axis_Y = 1;
+                else if(value < 0)
+                    axis_Y = -1;
+                else
+                    axis_Y = 0;
             }
         }
 
-        else
+        else if (!usingArduino)
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
-                button1Trigger = true;
-                
-            if(Input.GetKeyUp(KeyCode.Escape))
-                button1Trigger = false;
-
-            if(Input.GetKeyDown(KeyCode.Q))
-                button2Trigger = true;
-                
-            if(Input.GetKeyUp(KeyCode.Q))
-                button2Trigger = false;
-
             axis_X = Input.GetAxisRaw("Strafe");
             axis_Y = Input.GetAxisRaw("Forward");
         }
