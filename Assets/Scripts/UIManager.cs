@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private bool isMainMenu = false;
-    [SerializeField] private bool useTimeLimit = false;
     [SerializeField] private LevelAudioManager levelAudioManager;
     [SerializeField] private GameObject winScreen;
     [SerializeField] private GameObject loseScreen;
@@ -34,7 +33,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI winScoreText;
-    [SerializeField] private float timeLimit = 90f;
     [SerializeField] private float UIButtonMoveCooldown = 0.5f;
 
     [HideInInspector] public bool isPaused;
@@ -49,6 +47,7 @@ public class UIManager : MonoBehaviour
     private bool inputMode;
     private EnemyMovement[] enemies;
     private int score;
+    private float time;
     private bool button1Buffer;
     private bool button2Buffer;
     public bool Button1Buffer {get=> button1Buffer;}
@@ -60,6 +59,7 @@ public class UIManager : MonoBehaviour
     {
         eventSystem = FindObjectOfType<EventSystem>();
         score = 0;
+        time = 0f;
         ControllerInput.Instance.Button1Trigger = false;
         ControllerInput.Instance.Button2Trigger = false;
         button1Buffer = true;
@@ -125,15 +125,15 @@ public class UIManager : MonoBehaviour
     {
         CheckControllerBuffer();
 
-        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && useTimeLimit && !isMainMenu)
+        if(!isPaused && !loseScreen.activeSelf && !winScreen.activeSelf && !isMainMenu)
         {
-            timeLimit -= Time.deltaTime;
+            time += Time.deltaTime;
 
-            float minutes = Mathf.Floor(timeLimit / 60);
-            float seconds = Mathf.Floor(timeLimit % 60);
-            float milliseconds = Mathf.Floor((timeLimit % 60 - Mathf.Floor(timeLimit % 60)) * 100);
+            float minutes = Mathf.Floor(time / 60);
+            float seconds = Mathf.Floor(time % 60);
+            float milliseconds = Mathf.Floor((time % 60 - Mathf.Floor(time % 60)) * 100);
 
-            timerText.text = "Time left: ";
+            timerText.text = "Tempo: ";
             
             if (minutes < 10)
                 timerText.text += "0";
@@ -146,19 +146,6 @@ public class UIManager : MonoBehaviour
             if (milliseconds < 10)
                 timerText.text += "0";
             timerText.text += $"{milliseconds}";
-
-
-            if (timeLimit >= 11)
-                timerText.color = Color.white;
-            else
-                timerText.color = Color.red;
-
-            if (timeLimit <= 0f)
-            {
-                Lose();
-                timerText.text = $"Time left: 00:00:00";
-                levelAudioManager.PlayTimesUp();
-            }
         }
     }
 
@@ -259,7 +246,7 @@ public class UIManager : MonoBehaviour
         winScreen.SetActive(true);
         SetCurrentUIButtons(winScreenButtons);
         levelAudioManager.PlayLevelWin();
-        AddScore(1000 + (int)Mathf.Floor(timeLimit/60 * 100));
+        AddScore(Mathf.Max(10, 100 - (int)time));
     }
 
     public void Lose()
@@ -278,7 +265,7 @@ public class UIManager : MonoBehaviour
         objectiveIndicator.GetComponent<Image>().color = Color.white;
         objectiveIndicator.SetActive(true);
         levelAudioManager.PlayItemPickup();
-        AddScore(500 + (int)Mathf.Floor(timeLimit/60 * 25));
+        AddScore(Mathf.Max(5, 50 - (int)time));
         
         Destroy(objective);
     }
@@ -470,6 +457,7 @@ public class UIManager : MonoBehaviour
                 go.SetActive(glowEnabled);
         }
 
+        if(enemies == null) Start();
         foreach(EnemyMovement e in enemies)
         {
             if(!e.OriginallySleeping)
@@ -491,7 +479,7 @@ public class UIManager : MonoBehaviour
         score += amount;
 
 
-        for(int i = 10000; i >= 10; i /= 10)
+        for(int i = 100; i >= 10; i /= 10)
         {
             if (score < i)
                 scoreString += "0";
