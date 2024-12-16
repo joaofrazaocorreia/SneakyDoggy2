@@ -1168,14 +1168,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
-  moveSpeed: 4
-  rotationVelocityFactor: 2
+  moveSpeed: 3.25
   model: {fileID: 710941438816305148}
   enemies: {fileID: 0}
   directionalArrow: {fileID: 3696996689560974942}
-  objectiveAndExit:
-  - {fileID: 0}
-  - {fileID: 0}
+  objectives: []
+  exit: {fileID: 0}
   anim: {fileID: 612217407939399595}
   gameStopped: 0
   playingDead: 0
@@ -1605,7 +1603,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 876164106d586694b863fd46a286ac3b, type: 3}
-  m_Color: {r: 0.2924527, g: 0.5024798, b: 1, a: 1}
+  m_Color: {r: 0.5686275, g: 0.95292807, b: 0.96862745, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> settingsMenuButtons;
     [SerializeField] private List<GameObject> creditsMenuButtons;
     [SerializeField] private List<GameObject> levelSelectMenuButtons;
-    [SerializeField] private GameObject objectiveIndicator;
+    [SerializeField] private TextMeshProUGUI objectivesText;
     [SerializeField] private GameObject arrowsCheckmark;
     [SerializeField] private GameObject glowCheckmark;
     [SerializeField] private GameObject keyboardInputCheckmark;
@@ -261,13 +261,15 @@ public class UIManager : MonoBehaviour
 
     public void GetObjective(GameObject objective)
     {
-        objectiveIndicator.GetComponent<Image>().sprite = objective.GetComponentInChildren<SpriteRenderer>().sprite;
-        objectiveIndicator.GetComponent<Image>().color = Color.white;
-        objectiveIndicator.SetActive(true);
         levelAudioManager.PlayItemPickup();
         AddScore(Mathf.Max(5, 50 - (int)time));
         
         Destroy(objective);
+    }
+
+    public void UpdateObjectiveText(int gottenObjectives, int totalObjectives)
+    {
+        objectivesText.text = $"{gottenObjectives} / {totalObjectives}";
     }
 
     public void TogglePause()

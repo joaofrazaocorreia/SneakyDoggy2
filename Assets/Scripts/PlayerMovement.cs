@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,12 +9,12 @@ public class PlayerMovement : MonoBehaviour
     public UIManager uiManager;
 
     [SerializeField] private float  moveSpeed;
-    [SerializeField] private float  rotationVelocityFactor;
 
     [SerializeField] private GameObject model;
     [SerializeField] private Transform enemies;
     [SerializeField] private Transform directionalArrow;
-    [SerializeField] private Transform[] objectiveAndExit;
+    [SerializeField] private Transform[] objectives;
+    [SerializeField] private Transform exit;
     [SerializeField] private Animator anim;
 
     private CharacterController controller;
@@ -21,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 motion;
     private float height;
     private bool moving;
-    private bool hasObjective;
+    private int gottenObjectives;
     private bool godmode;
 
     [HideInInspector] public bool gameStopped;
@@ -33,7 +34,8 @@ public class PlayerMovement : MonoBehaviour
         velocity       = Vector3.zero;
         motion         = Vector3.zero;
         moving         = false;
-        hasObjective = false;
+        gottenObjectives = 0;
+        uiManager.UpdateObjectiveText(gottenObjectives, objectives.Count());
         gameStopped = false;
         playingDead = false;
         godmode = false;
@@ -75,14 +77,29 @@ public class PlayerMovement : MonoBehaviour
             }
             
 
-
+            
+            float distanceToExit = (exit.position - transform.position).magnitude;
+            float closestObjectiveDistance = float.MaxValue;
+            Transform closestObjective = exit;
             Vector3 arrowTargetPos;
 
-            if (!hasObjective)
-                arrowTargetPos = objectiveAndExit[0].position - transform.position;
+            foreach(Transform t in objectives)
+            {
+                if(t && (t.position - transform.position).magnitude < closestObjectiveDistance)
+                {
+                    closestObjective = t;
+                    closestObjectiveDistance = (t.position - transform.position).magnitude;
+                }
+            }
 
-            else
-                arrowTargetPos = objectiveAndExit[1].position - transform.position;
+            arrowTargetPos = closestObjective.position - transform.position;
+
+            if(gottenObjectives > 0)
+            {
+                if(distanceToExit < closestObjectiveDistance)
+                    arrowTargetPos = exit.position - transform.position;
+            }
+
 
             directionalArrow.rotation = Quaternion.LookRotation(arrowTargetPos);
             directionalArrow.rotation = Quaternion.Euler(new Vector3(directionalArrow.rotation.eulerAngles.x, directionalArrow.rotation.eulerAngles.y - 90, directionalArrow.rotation.eulerAngles.z));
@@ -159,7 +176,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!gameStopped && !uiManager.isPaused)
         {
-            if (collision.transform.tag == "Entrance" && hasObjective)
+            if (collision.transform.tag == "Entrance" && gottenObjectives > 0)
             {
                 gameStopped = true;
                 uiManager.Win();
@@ -185,8 +202,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (collision.transform.tag == "Objective") 
             {
-                hasObjective = true;
+                gottenObjectives += 1;
                 uiManager.GetObjective(collision.gameObject);
+                uiManager.UpdateObjectiveText(gottenObjectives, objectives.Count());
             }
         }
     }
