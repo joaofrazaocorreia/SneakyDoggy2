@@ -39,8 +39,6 @@ public class PlayerMovement : MonoBehaviour
         godmode = false;
         moveSpeed /= 18f;
         height = transform.position.y;
-
-        StartCoroutine(FixCollisions());
     }
 
     private void Update()
@@ -57,10 +55,8 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed *= 3f;
             Debug.Log("Godmode");
         }
-    }
 
-    private void FixedUpdate()
-    {
+
         if (!gameStopped && !uiManager.isPaused)
         {
             if (ControllerInput.Instance.Button2Trigger && !uiManager.Button2Buffer)
@@ -192,20 +188,6 @@ public class PlayerMovement : MonoBehaviour
                 hasObjective = true;
                 uiManager.GetObjective(collision.gameObject);
             }
-        }
-    }
-
-    private IEnumerator FixCollisions()
-    {
-        while (true)
-        {
-            controller.enabled = false;
-
-            yield return new WaitForSeconds(0.01f);
-
-            controller.enabled = true;
-
-            yield return new WaitForSeconds(0.25f);
         }
     }
 }
