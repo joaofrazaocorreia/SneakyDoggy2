@@ -1168,7 +1168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
-  moveSpeed: 3.25
+  moveSpeed: 2.75
   model: {fileID: 710941438816305148}
   enemies: {fileID: 0}
   directionalArrow: {fileID: 3696996689560974942}

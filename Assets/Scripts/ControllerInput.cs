@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 using System;
 using System.Linq;
-using TMPro;
 
 public class ControllerInput : MonoBehaviour
 {
@@ -12,9 +9,9 @@ public class ControllerInput : MonoBehaviour
     private SerialPort serial;
     private UIManager uiManager;
     private string arduinoInput;
-    private bool usingArduino;
-    public bool UsingArduino {get => usingArduino;}
-    private int portsAvailable = 0;
+    private bool usingArduinoSerial;
+    public bool UsingArduino {get => usingArduinoSerial;}
+    //private int portsAvailable = 0;
 
     private bool button1Trigger = false;
     private bool button2Trigger = false;
@@ -28,7 +25,7 @@ public class ControllerInput : MonoBehaviour
 
     private void Awake()
     {
-        UpdateUIManager();
+        uiManager = FindAnyObjectByType<UIManager>();
 
         if(Instance != null)
         {
@@ -40,13 +37,19 @@ public class ControllerInput : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            portsAvailable = SerialPort.GetPortNames().Count();
-            OpenSerial();
+
+            // Automatically checks all available ports for a serial to connect to
+            // (currently disabled since specific joystick inputs aren't implemented yet)
+
+            //portsAvailable = SerialPort.GetPortNames().Count();
+            //OpenSerial();
         }
     }
 
     private void Update()
     {
+        // Checks for keyboard inputs of the two buttons
+
         if(Input.GetKeyDown(KeyCode.Escape))
             button1Trigger = true;
             
@@ -60,7 +63,8 @@ public class ControllerInput : MonoBehaviour
             button2Trigger = false;
         
 
-        if(usingArduino && serial != null && serial.BytesToRead > 0)
+        // If serial reading is enabled, the code reads the exact value of the joystick positions
+        if(usingArduinoSerial && serial != null && serial.BytesToRead > 0)
         {
             arduinoInput = serial.ReadLine();
 
@@ -69,6 +73,7 @@ public class ControllerInput : MonoBehaviour
                 string newString = arduinoInput.Remove(0,"JOYSTICK_X: ".Count());
                 float value = float.Parse(newString);
 
+                // Temporary code until joystick specific values are implemented
                 if(value > 0)
                     axis_X = 1;
                 else if(value < 0)
@@ -82,7 +87,7 @@ public class ControllerInput : MonoBehaviour
                 string newString = arduinoInput.Remove(0,"JOYSTICK_Y: ".Count());
                 float value = float.Parse(newString);
 
-
+                // Temporary code until joystick specific values are implemented
                 if(value > 0)
                     axis_Y = 1;
                 else if(value < 0)
@@ -92,24 +97,29 @@ public class ControllerInput : MonoBehaviour
             }
         }
 
-        else if (!usingArduino)
+        // If serial reading is disabled, checks for keyboard inputs (like the buttons)
+        else if (!usingArduinoSerial)
         {
             axis_X = Input.GetAxisRaw("Strafe");
             axis_Y = Input.GetAxisRaw("Forward");
         }
     }
 
+    // Connects to an available port and reads its serial
     public void OpenSerial()
     {
+        // Must close any serials that are currently open
         CloseSerial();
 
+        // Searches through every available port for a serial to open and read,
+        // and connects to the first available one
         foreach(string s in SerialPort.GetPortNames())
         {
             try
             {
                 serial = new SerialPort(s, 9600);
                 serial.Open();
-                usingArduino = true;
+                usingArduinoSerial = true;
                 uiManager.ToggleInputCheckmarks(true);
                 Debug.Log($"Connected to Arduino on port \"{s}\".");
                 break;
@@ -121,27 +131,24 @@ public class ControllerInput : MonoBehaviour
             }
         }
 
-        if(!usingArduino)
+        // If it was not possible to connect to any port, starts checking for keyboard inputs instead
+        if(!usingArduinoSerial)
         {
             uiManager.ToggleInputCheckmarks(false);
             Debug.LogWarning("Unable to connect to a port - Inputs will switch to the PC Input system.");
         }
     }
 
+    // Closes any serials that are currently open and resets the input mode to keyboard
     public void CloseSerial()
     {
         uiManager.ToggleInputCheckmarks(false);
         
-        if(usingArduino)
+        if(usingArduinoSerial)
         {
             serial.Close();
-            usingArduino = false;
+            usingArduinoSerial = false;
             Debug.Log($"Disconnected from Arduino.");
         }
-    }
-
-    private void UpdateUIManager()
-    {
-        uiManager = FindAnyObjectByType<UIManager>();
     }
 }

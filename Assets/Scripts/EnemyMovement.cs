@@ -43,7 +43,6 @@ public class EnemyMovement : MonoBehaviour
         idleTimer = 0f;
         detectReactionTimer = 0f;
         currentTarget = movementTargets[Random.Range(0, movementTargets.Length)];
-        moveSpeed *= 3f;
         originallySleeping = sleeping;
         detectSymbol.SetActive(false);
 

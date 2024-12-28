@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject glowCheckmark;
     [SerializeField] private GameObject keyboardInputCheckmark;
     [SerializeField] private GameObject controllerInputCheckmark;
+    [SerializeField] private GameObject volumeSlider;
     [SerializeField] private GameObject enemySpeedSlider;
     [SerializeField] private GameObject enemiesCheckmark;
     [SerializeField] private GameObject[] directionalArrows;
@@ -42,6 +43,7 @@ public class UIManager : MonoBehaviour
     private EventSystem eventSystem;
     private bool arrowsEnabled;
     private bool glowEnabled;
+    private int volumeSliderValue;
     private int enemySpeedSliderValue;
     private bool enemiesEnabled;
     private bool inputMode;
@@ -76,6 +78,7 @@ public class UIManager : MonoBehaviour
         glowEnabled = false;
         glowCheckmark.SetActive(false);
 
+        volumeSliderValue = 100;
         enemySpeedSliderValue = 100;
 
         enemiesEnabled = true;
@@ -97,10 +100,18 @@ public class UIManager : MonoBehaviour
             glowCheckmark.SetActive(true);
         }
 
+        if (PlayerPrefs.GetInt("Volume", 100) != 100)
+        {
+            volumeSliderValue = PlayerPrefs.GetInt("Volume");
+            volumeSlider.GetComponent<Slider>().value = volumeSliderValue;
+            ChangeVolume();
+        }
+
         if (PlayerPrefs.GetInt("EnemySpeed", 100) != 100)
         {
             enemySpeedSliderValue = PlayerPrefs.GetInt("EnemySpeed");
             enemySpeedSlider.GetComponent<Slider>().value = enemySpeedSliderValue;
+            ChangeEnemySpeed();
         }
 
         if (PlayerPrefs.GetInt("EnemyToggle", 1) == 0)
@@ -419,15 +430,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ChangeVolume()
+    {
+        volumeSliderValue = (int) volumeSlider.GetComponent<Slider>().value;
+        levelAudioManager.SetVolume(volumeSliderValue);
+        MenuAudioManager.SetVolume(volumeSliderValue);
+        
+        PlayerPrefs.SetInt("Volume", volumeSliderValue);
+        PlayerPrefs.Save();
+    }
+
     public void ChangeEnemySpeed()
     {
         enemySpeedSliderValue = (int) enemySpeedSlider.GetComponent<Slider>().value;
+
         PlayerPrefs.SetInt("EnemySpeed", enemySpeedSliderValue);
-
-
         PlayerPrefs.Save();
-        if(!isMainMenu)
-            UpdateSettings();
     }
 
     public void ToggleEnemies()
@@ -441,6 +459,7 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("EnemyToggle", 0);
 
         PlayerPrefs.Save();
+
         if(!isMainMenu)
             UpdateSettings();
     }

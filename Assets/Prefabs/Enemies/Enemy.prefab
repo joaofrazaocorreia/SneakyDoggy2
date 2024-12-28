@@ -533,7 +533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sleeping: 0
-  moveSpeed: 8
+  moveSpeed: 12
   idleTime: 5
   aggroTime: 2
   aggroDistance: 15

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelAudioManager : MonoBehaviour
@@ -45,5 +43,10 @@ public class LevelAudioManager : MonoBehaviour
     {
         feedbackAudioSource.pitch = 1f;
         PlayFeedbackSound(timesUp);
+    }
+
+    public void SetVolume(float volumePercent)
+    {
+        feedbackAudioSource.volume = Mathf.Clamp(volumePercent / 100f, 0f, 0.75f);
     }
 }
