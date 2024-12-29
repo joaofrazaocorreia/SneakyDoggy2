@@ -527,7 +527,7 @@ public class UIManager : MonoBehaviour
         winScoreText.text = scoreString;
     }
 
-    private void SelectUIElement(GameObject selected)
+    public void SelectUIElement(GameObject selected)
     {
         if(currentSelectionGlow != null)
             currentSelectionGlow.SetActive(false);
