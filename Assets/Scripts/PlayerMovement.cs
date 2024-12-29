@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -39,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
         gameStopped = false;
         playingDead = false;
         godmode = false;
-        moveSpeed /= 18f;
         height = transform.position.y;
     }
 
@@ -114,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
                 velocity.z = ControllerInput.Instance.Axis_Y;
 
                 velocity.Normalize();
-                motion = velocity * moveSpeed;
+                motion = velocity * moveSpeed * Time.deltaTime;
 
                 if (velocity != Vector3.zero)
                 {
