@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public bool isPaused;
     [HideInInspector] public List<GameObject> currentButtons;
     [HideInInspector] public int currentButtonIndex;
+    [HideInInspector] public GameObject currentSelectionGlow;
 
     private EventSystem eventSystem;
     private bool arrowsEnabled;
@@ -189,7 +190,7 @@ public class UIManager : MonoBehaviour
                     if(currentButtonIndex >= currentButtons.Count)
                         currentButtonIndex = 0;
 
-                    eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
+                    SelectUIElement(currentButtons[currentButtonIndex]);
                 }
 
                 else if(axis > 0)
@@ -199,7 +200,7 @@ public class UIManager : MonoBehaviour
                     if(currentButtonIndex < 0)
                         currentButtonIndex = currentButtons.Count - 1;
 
-                    eventSystem.SetSelectedGameObject(currentButtons[currentButtonIndex]);
+                    SelectUIElement(currentButtons[currentButtonIndex]);
                 }
             }
         }
@@ -490,7 +491,7 @@ public class UIManager : MonoBehaviour
     {
         currentButtons = buttons;
         currentButtonIndex = 0;
-        eventSystem.SetSelectedGameObject(currentButtons[0]);
+        SelectUIElement(currentButtons[0]);
         scrollUIButtonsHorizontally = scrollHorizontally;
     }
 
@@ -511,6 +512,17 @@ public class UIManager : MonoBehaviour
 
         scoreText.text = scoreString;
         winScoreText.text = scoreString;
+    }
+
+    private void SelectUIElement(GameObject selected)
+    {
+        if(currentSelectionGlow != null)
+            currentSelectionGlow.SetActive(false);
+        
+        eventSystem.SetSelectedGameObject(selected);
+        
+        currentSelectionGlow = selected.transform.Find("ButtonSelected").gameObject;
+        currentSelectionGlow.SetActive(true);
     }
 
     public void QuitGame()
