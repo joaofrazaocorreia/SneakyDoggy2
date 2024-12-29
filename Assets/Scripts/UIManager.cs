@@ -228,10 +228,23 @@ public class UIManager : MonoBehaviour
         else UIButtonMoveTimer = 0f;
 
 
-        if (controllerInput.Button1Trigger && !button1Buffer && !isMainMenu)
+        if (controllerInput.Button1Trigger && !button1Buffer)
         {
-            TogglePause();
-            button1Buffer = true;
+            if(!isMainMenu)
+            {
+                TogglePause();
+                button1Buffer = true;
+            }
+
+            else
+            {
+                pauseMenu.SetActive(true);
+                settingsMenu.SetActive(false);
+                creditsMenu.SetActive(false);
+                levelSelectMenu.SetActive(false);
+                
+                SetCurrentUIButtons(pauseMenuButtons);
+            }
         }
 
         else if (!controllerInput.Button1Trigger && button1Buffer)
