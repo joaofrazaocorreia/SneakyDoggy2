@@ -11,7 +11,6 @@ public class ControllerInput : MonoBehaviour
     private string arduinoInput;
     private bool usingArduinoSerial;
     public bool UsingArduino {get => usingArduinoSerial;}
-    //private int portsAvailable = 0;
 
     private bool button1Trigger = false;
     private bool button2Trigger = false;
@@ -39,10 +38,7 @@ public class ControllerInput : MonoBehaviour
 
 
             // Automatically checks all available ports for a serial to connect to
-            // (currently disabled since specific joystick inputs aren't implemented yet)
-
-            //portsAvailable = SerialPort.GetPortNames().Count();
-            //OpenSerial();
+            OpenSerial();
         }
     }
 
