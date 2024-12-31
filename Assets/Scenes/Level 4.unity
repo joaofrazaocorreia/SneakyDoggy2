@@ -278,7 +278,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 6141930}
@@ -3077,7 +3077,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 210004715}
@@ -3760,7 +3760,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 266878792}
@@ -5076,7 +5076,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 351897403}
@@ -6731,7 +6731,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 531768277}
@@ -7193,7 +7193,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 558344538}
@@ -8350,7 +8350,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 628073101}
@@ -8527,7 +8527,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 637551814}
@@ -9209,7 +9209,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 692276645}
@@ -12208,7 +12208,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 969771382}
@@ -13635,7 +13635,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1110424469}
@@ -14069,7 +14069,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1159379853}
@@ -15270,7 +15270,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1316665062}
@@ -16616,7 +16616,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1411374719}
@@ -22575,7 +22575,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 159994895}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: GetObjective
+          m_MethodName: SelectUIElement
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1959620604}

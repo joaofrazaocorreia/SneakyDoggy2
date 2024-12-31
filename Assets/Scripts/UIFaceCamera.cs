@@ -15,6 +15,8 @@ public class UIFaceCamera : MonoBehaviour
 
     private void Update()
     {
+        // Makes the attached UI always face the Main Camera of the level
+        
         Vector3 toTarget = playerCamera.position - transform.position;
         Vector3 rotation = Quaternion.LookRotation(toTarget).eulerAngles;
 

@@ -11,15 +11,19 @@ public class OcclusionChecker : MonoBehaviour
 
     private List<GameObject> transparentObstacles;
 
+    // Initializes a list of every object that can be occluded
     private void Start()
     {
         transparentObstacles = new List<GameObject>();
     }
 
+    // When the occlusion checker finds an obstacle between the player and the camera
     private void OnCollisionEnter(Collision collision)
     {
+        // Checks if that obstacle isn't already transparent and is one of the objects that can be occluded
         if(!transparentObstacles.Contains(collision.gameObject) && collision.gameObject.tag == "Occlusive")
         {
+            // Registers the obstacle as occluded, then turns it transparent
             transparentObstacles.Add(collision.gameObject);
 
             foreach(MeshRenderer mr in collision.gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -29,10 +33,13 @@ public class OcclusionChecker : MonoBehaviour
         }
     }
 
+    // When the occlusion checker no longer finds an obstacle between the player and the camera
     private void OnCollisionExit(Collision collision)
     {
+        // Checks if that obstacle had been turned transparent
         if(transparentObstacles.Contains(collision.gameObject))
         {
+            // Unregisters the obstacle as occluded, then returns the transparency to normal
             transparentObstacles.Remove(collision.gameObject);
 
             foreach(MeshRenderer mr in collision.gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -42,6 +49,7 @@ public class OcclusionChecker : MonoBehaviour
         }
     }
 
+    // Changes the transparency over multiple frames to make it a smooth visual to the human eye
     private IEnumerator ChangeAlpha(Material material, float alpha, GameObject collisionGameObject)
     {
         while(material.color.a != alpha)

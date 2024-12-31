@@ -3,6 +3,7 @@ using System.IO.Ports;
 using System;
 using System.Linq;
 
+// Translates inputs from the controller into feedback for actions in the game
 public class ControllerInput : MonoBehaviour
 {
     public static ControllerInput Instance;
@@ -24,16 +25,18 @@ public class ControllerInput : MonoBehaviour
 
     private void Awake()
     {
-        uiManager = FindAnyObjectByType<UIManager>();
-
+        // As a static class, only one instance of this script can exist in the game at the same time
         if(Instance != null)
         {
             Destroy(gameObject);
         }
 
+        // If this is the first instance, it remains loaded in the scene permanently
+        // (and any others after it get destroyed)
         else
         {
             Instance = this;
+            uiManager = FindAnyObjectByType<UIManager>();
             DontDestroyOnLoad(gameObject);
 
 
@@ -116,7 +119,6 @@ public class ControllerInput : MonoBehaviour
                 serial = new SerialPort(s, 9600);
                 serial.Open();
                 usingArduinoSerial = true;
-                uiManager.ToggleInputCheckmarks(true);
                 Debug.Log($"Connected to Arduino on port \"{s}\".");
                 break;
             }
@@ -130,7 +132,6 @@ public class ControllerInput : MonoBehaviour
         // If it was not possible to connect to any port, starts checking for keyboard inputs instead
         if(!usingArduinoSerial)
         {
-            uiManager.ToggleInputCheckmarks(false);
             Debug.LogWarning("Unable to connect to a port - Inputs will switch to the PC Input system.");
         }
     }
@@ -138,8 +139,6 @@ public class ControllerInput : MonoBehaviour
     // Closes any serials that are currently open and resets the input mode to keyboard
     public void CloseSerial()
     {
-        uiManager.ToggleInputCheckmarks(false);
-        
         if(usingArduinoSerial)
         {
             serial.Close();
