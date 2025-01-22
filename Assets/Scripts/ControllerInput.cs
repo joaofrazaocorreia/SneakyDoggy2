@@ -41,16 +41,18 @@ public class ControllerInput : MonoBehaviour
 
             usingArduinoInput_X = false;
             usingArduinoInput_Y = false;
-            axis_X = Input.GetAxisRaw("Strafe");
-            axis_Y = Input.GetAxisRaw("Forward");
+            axis_X = 0;
+            axis_Y = 0;
             prevAxis_X = axis_X;
             prevAxis_Y = axis_Y;
 
             DontDestroyOnLoad(gameObject);
 
-
+            #if !UNITY_WEBGL
             // Automatically checks all available ports for a serial to connect to
+            // (Except in WebGL builds because it breaks everything)
             OpenSerial();
+            #endif
         }
     }
 
