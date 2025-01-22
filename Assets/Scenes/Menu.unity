@@ -1393,7 +1393,7 @@ MonoBehaviour:
   timerText: {fileID: 0}
   scoreText: {fileID: 0}
   winScoreText: {fileID: 0}
-  UIButtonMoveCooldown: 0.5
+  UIButtonMoveCooldown: 0.65
   isPaused: 0
   currentButtons: []
   currentButtonIndex: 0
